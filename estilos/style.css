@@ -1,0 +1,296 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
+
+/* Estilos da página principal */
+body {
+    margin: 0;
+    position: relative;
+      min-height: 100vh;
+}
+
+/*HOME*/
+.main-page {
+    background: black;
+    background-image: url('../imagens/fundo-home.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    margin: 30px 20px;
+    width: 150px; /* Ajuste o tamanho do logo conforme necessário */
+}
+
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.txt-titulo {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-top: 50px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+div.txt-animado {
+  color: white;
+  font-size: 1.25em;
+  font-weight: bold;
+  margin-right: 30px;
+   text-align: center;
+}
+
+.txt-animado span {
+  position: relative;
+  color: #c80101;
+}
+
+.txt-animado span::before {
+  content: "Vanádio";
+  color: #c80101;
+  animation: words 20s infinite;
+}
+
+.txt-animado span::after {
+  content: "";
+  position: absolute;
+  width: calc(100% + 8px);
+  height: 100%;
+  background-color: #272727;
+  border-left: 3px solid #0a233a;
+  right: -8px;
+  animation: cursor 0.7s infinite, typing 20s steps(12) infinite;
+}
+
+@keyframes cursor {
+  to {
+    border-left: 3px solid #123F68;
+  }
+}
+
+@keyframes words {
+  0%,
+  20% {
+    content: "Cabelo";
+  }
+  21%,
+  40% {
+    content: "Barba";
+  }
+  41%,
+  60% {
+    content: "Sobrancelha";
+  }
+  61%,
+  80% {
+    content: "Cabelo";
+  }
+  81%,
+  100% {
+    content: "Barba";
+  }
+}
+
+@keyframes typing {
+  10%,
+  15%,
+  30%,
+  35%,
+  50%,
+  55%,
+  70%,
+  75%,
+  90%,
+  95% {
+    width: 0;
+  }
+  5%,
+  20%,
+  25%,
+  40%,
+  45%,
+  60%,
+  65%,
+  80%,
+  85% {
+    width: calc(100% + 5px);
+  }
+}
+
+.txt {
+    font-size: 1em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.btn-agenda {
+    width: 250px;
+    height: 60px;
+    text-decoration: none;
+    background-color: #D62828;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: ease 0.5s all;
+}
+
+.btn-agenda:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px #c80101;
+}
+
+.marcas-home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: auto;
+}
+
+.logo-marca {
+    height: 80px; 
+    filter: drop-shadow(0 0 20px #0000005c);
+}
+
+/*MENU*/
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #E6F4FA; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    z-index: 99;
+}
+
+.menu-links {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.menu-item {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #1C1C1C;
+    text-decoration: none;
+    margin: 20px 0;
+    display: block;
+}
+
+.menu-overlay {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#hamburger:checked ~ .menu-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+#hamburger {
+    display: none;
+}
+
+.hamburger {
+  position: fixed; /* fica sempre fixo na tela */
+  top: 95px;       /* distância do topo */
+  right: 30px;     /* distância da direita */
+  z-index: 9999;
+  cursor: pointer;
+
+}
+
+.hamburger input {
+  display: none;
+}
+
+.hamburger svg {
+  /* The size of the SVG defines the overall size */
+  height: 3em;
+  /* Define the transition for transforming the SVG */
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line {
+  fill: none;
+  stroke: #D62828;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  /* Define the transition for transforming the Stroke */
+  transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-top-bottom {
+  stroke-dasharray: 12 63;
+}
+
+.hamburger input:checked + svg {
+  transform: rotate(-45deg);
+}
+
+.hamburger input:checked + svg .line-top-bottom {
+  stroke-dasharray: 20 300;
+  stroke-dashoffset: -32.42;
+}
+
+/*ANIMAÇÕES*/
+.fade-title {
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+}
+
+.fade-img {
+  opacity: 0;
+  transform: scale(0.2);
+  transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+}
+
+.fade-title.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-img.show {
+  opacity: 1;
+  transform: scale(1);
+}

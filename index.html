@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="estilos/style.css" />
+  </head>
+  <body>
+    <!--HEADER-->
+    <div id="topo"></div>
+    <main class="main-page">
+      <header class="header" id="header">
+        <div class="logo">
+          <img
+            src="imagens/logoBarber.png"
+            alt="Mineradora Paulista Logo"
+          />
+        </div>
+
+        <label class="hamburger">
+          <input type="checkbox" id="checkbox"/>
+          <svg viewBox="0 0 32 32">
+            <path
+              d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+              class="line line-top-bottom"
+            ></path>
+            <path d="M7 16 27 16" class="line"></path>
+          </svg>
+        </label>
+      </header>
+
+      <div class="menu-overlay">
+        <ul class="menu-links">
+          <li><a href="#header" class="menu-item">HOME</a></li>
+          <li>
+            <a href="paginas/saibaMais.html" class="menu-item">SOBRE NÓS</a>
+          </li>
+          <li><a href="#marcas" class="menu-item">NOSSOS SERVIÇOS</a></li>
+          <li><a href="#" class="menu-item">AGENDA</a></li>
+        </ul>
+      </div>
+
+      <!--HOME-->
+      <section class="hero-section">
+        <h1 class="txt-titulo">Agende já um horário para</h1>
+        <div class="txt-animado">fazer <span></span></div>
+        <p class="txt">Clique abaixo e garanta seu horário</p>
+        <a href="#form"><button class="btn-agenda">AGENDE UM HORÁRIO</button></a>
+      </section>
+
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>

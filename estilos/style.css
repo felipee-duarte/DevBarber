@@ -50,7 +50,7 @@ body {
 }
 
 .txt-titulo {
-    font-size: 1.5em;
+    font-size: clamp(24px, 2.7vw, 48px);
     font-weight: bold;
     margin-top: 50px;
     text-align: center;
@@ -143,7 +143,7 @@ div.txt-animado {
 }
 
 .txt {
-    font-size: 1em;
+    font-size: clamp(16px, 0.5vw, 20px);
     margin-bottom: 20px;
     text-align: center;
 }
@@ -155,7 +155,7 @@ div.txt-animado {
     background-color: #D62828;
     color: #fff;
     border: none;
-    border-radius: 10px;
+    border-radius: 30px;
     font-size: 1em;
     cursor: pointer;
     font-weight: bold;
@@ -293,4 +293,73 @@ div.txt-animado {
 .fade-img.show {
   opacity: 1;
   transform: scale(1);
+}
+
+/*SOBRE*/
+
+.sobre {
+  display: flex;
+  transform: translateY(400px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.sobre img {
+  width: 100vw;
+}
+
+.sobre .home-dev {
+  width: 90vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.sobre .home-dev .barra {
+  width: 45vw;
+  border-top: 3px solid red;
+}
+
+.sobre .home-dev .txt-sobre p {
+  color: black;
+}
+
+.sobre .home-dev .txt-sobre h1 {
+  color: black;
+}
+
+.sobre .txt {
+  color: black;
+  text-align: justify;
+  margin: 0 20px 20px 20px;
+}
+
+.sobre .btn {
+    width: 150px;
+    height: 60px;
+    text-decoration: none;
+    background-color: #D62828;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: ease 0.5s all;
+}
+
+.btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px #c80101;
+}
+
+/*SERVIÇOS*/
+.serviços {
+  display: grid;
+  
 }

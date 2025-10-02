@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -10,6 +12,13 @@ body {
     margin: 0;
     position: relative;
       min-height: 100vh;
+}
+
+.texto {
+  font-size: clamp(16px, 0.5vw, 20px);
+    margin-bottom: 20px;
+    text-align: center;
+    color: black;
 }
 
 /*HOME*/
@@ -229,7 +238,7 @@ div.txt-animado {
 }
 
 .hamburger {
-  position: fixed; /* fica sempre fixo na tela */
+  position: absolute; /* fica sempre fixo na tela */
   top: 95px;       /* distância do topo */
   right: 30px;     /* distância da direita */
   z-index: 9999;
@@ -360,6 +369,79 @@ div.txt-animado {
 
 /*SERVIÇOS*/
 .serviços {
-  display: grid;
-  
+  background: url(../imagens/fundoServiços.png) no-repeat bottom / cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  transform: translateY(400px);
+}
+
+.serviços h1{
+  font-size: clamp(24px, 2.7vw, 48px);
+  color: black;
+  text-align: center;
+}
+
+.serviços p { 
+  font-size: clamp(16px, 0.5vw, 20px);
+  color: black;
+  text-align: center;
+  width: 70vw;
+}
+
+.serviços .cards {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 350px;
+  height: 250px;
+  background: #EAEAEA;
+  border: 2px solid #C2C2C2;
+  border-radius: 20px;
+  padding: 10px;
+  transition: ease 0.5s all;
+}
+
+.serviços .cards:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px #ad0000;
+}
+
+.serviços .cards img {
+  width: 100px;
+}
+
+.serviços .cards h2 {
+  font-size: clamp(20px, 2.5vw, 40px);
+  color: black;
+  text-align: center;
+}
+
+.serviços .cards p {
+  font-size: clamp(16px, 0.5vw, 20px);
+  color: black;
+  text-align: center;
+}
+
+.serviços .btn {
+    width: 150px;
+    height: 60px;
+    text-decoration: none;
+    background-color: #D62828;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: ease 0.5s all;
+}
+
+.btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px #c80101;
 }

@@ -312,8 +312,7 @@ div.txt-animado {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .sobre img {
@@ -369,13 +368,20 @@ div.txt-animado {
 
 /*SERVIÇOS*/
 .serviços {
-  background: url(../imagens/fundoServiços.png) no-repeat bottom / cover;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 20px;
   transform: translateY(400px);
+}
+
+.serviços .fundo {
+  z-index: -1;
+  width: 100vw;
+  object-fit: cover;
+  position: absolute;
+  background-position: bottom;
 }
 
 .serviços h1{
@@ -410,7 +416,7 @@ div.txt-animado {
   box-shadow: 0 0 20px #ad0000;
 }
 
-.serviços .cards img {
+.serviços .img-card {
   width: 100px;
 }
 
@@ -444,4 +450,33 @@ div.txt-animado {
 .btn:hover {
     transform: translateY(-5px);
     box-shadow: 0 0 15px #c80101;
+}
+
+.serviços .destaque {
+  width: 100vw;
+}
+
+/*AGENDA*/
+.agenda {
+  transform: translateY(400px);
+  margin-top: 50px;
+}
+
+.agenda h1{
+  font-size: clamp(24px, 2.7vw, 48px);
+  color: black;
+  text-align: center;
+}
+
+.agenda-container iframe {
+    width: 100%;
+    height: auto;  
+  }
+
+.agenda .fundo-agenda {
+  z-index: -1;
+  width: 100vw;
+  object-fit: cover;
+  position: absolute;
+  background-position: bottom;
 }

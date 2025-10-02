@@ -12,14 +12,11 @@
     <main class="main-page">
       <header class="header" id="header">
         <div class="logo">
-          <img
-            src="imagens/logoBarber.png"
-            alt="Mineradora Paulista Logo"
-          />
+          <img src="imagens/logoBarber.png" alt="Mineradora Paulista Logo" />
         </div>
 
         <label class="hamburger">
-          <input type="checkbox" id="checkbox"/>
+          <input type="checkbox" id="checkbox" />
           <svg viewBox="0 0 32 32">
             <path
               d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
@@ -46,12 +43,14 @@
         <h1 class="txt-titulo">Agende já um horário para</h1>
         <div class="txt-animado">fazer <span></span></div>
         <p class="txt">Clique abaixo e garanta seu horário</p>
-        <a href="#form"><button class="btn-agenda">AGENDE UM HORÁRIO</button></a>
+        <a href="#form"
+          ><button class="btn-agenda">AGENDE UM HORÁRIO</button></a
+        >
       </section>
 
       <!--SOBRE-->
       <section class="sobre">
-        <img src="imagens/devfaixaP.jpg" alt="">
+        <img src="imagens/devfaixaP.jpg" alt="" />
 
         <div class="home-dev">
           <div class="txt-sobre">
@@ -62,13 +61,14 @@
         </div>
 
         <p class="txt">
-          Na Dev Barber, cada detalhe é pensado para você viver mais do que um corte é estilo, cuidado e personalidade.
-          Aqui tradição e modernidade se encontram,   trazendo        técnicas atuais, atendimento de   qualidade e um ambiente       feito pra você se   sentir em casa.
-          Dev Barber — onde sua confiança ganha forma.
-      </p>
+          Na Dev Barber, cada detalhe é pensado para você viver mais do que um
+          corte é estilo, cuidado e personalidade. Aqui tradição e modernidade
+          se encontram, trazendo técnicas atuais, atendimento de qualidade e um
+          ambiente feito pra você se sentir em casa. Dev Barber — onde sua
+          confiança ganha forma.
+        </p>
 
-      <a href="#form"><button class="btn">AGENDE UM HORÁRIO</button></a>
-
+        <a href="#form"><button class="btn">AGENDE UM HORÁRIO</button></a>
       </section>
 
       <!--SERVIÇOS-->
@@ -76,24 +76,43 @@
         <h1>Nossos Serviços</h1>
         <p>Um pouco dos cuidados que oferecemos para valorizar seu estilo.</p>
         <div class="cards">
-          <img src="imagens/cabelo.png" alt="Imagem Cabelo">
+          <img src="imagens/cabelo.png" class="img-card" alt="Imagem Cabelo" />
           <h2>Corte de Cabelo</h2>
-          <p>Do clássico ao moderno, do social ao degrade, nosso profissionalismo te oferecerá o melhor serviço e a experiência.</p>
+          <p>
+            Do clássico ao moderno, do social ao degrade, nosso profissionalismo
+            te oferecerá o melhor serviço e a experiência.
+          </p>
         </div>
 
         <div class="cards">
-          <img src="imagens/barba.png" alt="Imagem barba">
+          <img src="imagens/barba.png" class="img-card" alt="Imagem barba" />
           <h2>Designe de Barba</h2>
-          <p>Barba terapia ou barba simples, feita do estilo tradicional com navalha, aplicação de toalha quente e produto de alta qualidade.</p>
+          <p>
+            Barba terapia ou barba simples, feita do estilo tradicional com
+            navalha, aplicação de toalha quente e produto de alta qualidade.
+          </p>
         </div>
 
         <div class="cards">
-          <img src="imagens/sobrancelha.png" alt="Imagem sobrancelha">
+          <img
+            src="imagens/sobrancelha.png"
+            class="img-card"
+            alt="Imagem sobrancelha"
+          />
           <h2>Design de Sobrancelha</h2>
           <p>Deixamos sua sobrancelha no estilo com o uso de navalha.</p>
         </div>
         <a href="#form"><button class="btn">AGENDE UM HORÁRIO</button></a>
-        <img src="imagens/img-barba02.jpg" alt="">
+        <img src="imagens/destaqueServiços.png" class="destaque" alt="" />
+        <img src="imagens/fundoServiços.png" class="fundo" alt="" />
+      </section>
+
+      <section class="agenda">
+        <h1>Agende um Horário</h1>
+        <!-- Google Calendar Appointment Scheduling begin -->
+        <iframe class="agenda-container" src="https://calendar.google.com/calendar/embed?src=3bbd16c2885f147714d0563949998b2b3bdde11fe8d2fd7fa539ec2aa8868be8%40group.calendar.google.com&ctz=America%2FSao_Paulo" style="border: 0" width="100%" height="250px" frameborder="0" scrolling="no"></iframe>
+        <!-- end Google Calendar Appointment Scheduling -->
+        <img src="imagens/fundo-agenda.png" class="fundo-agenda alt="" />
       </section>
     </main>
     <script src="script.js"></script>

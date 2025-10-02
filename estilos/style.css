@@ -464,19 +464,23 @@ div.txt-animado {
 
 .agenda h1{
   font-size: clamp(24px, 2.7vw, 48px);
-  color: black;
+  color: #D62828;
   text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .agenda-container iframe {
     width: 100%;
-    height: auto;  
+    height: 70vh;
   }
 
 .agenda .fundo-agenda {
   z-index: -1;
   width: 100vw;
+  transform: translateX(-20px);
   object-fit: cover;
   position: absolute;
-  background-position: bottom;
+  background-position: center;
+  outline: 1px solid red;
 }

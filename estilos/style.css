@@ -308,7 +308,8 @@ div.txt-animado {
 
 .sobre {
   display: flex;
-  transform: translateY(400px);
+  margin-top: 50px;
+  transform: translateY(300px);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -373,12 +374,13 @@ div.txt-animado {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  transform: translateY(400px);
+  transform: translateY(300px);
 }
 
 .serviços .fundo {
   z-index: -1;
   width: 100vw;
+  height: 100%;
   object-fit: cover;
   position: absolute;
   background-position: bottom;
@@ -458,7 +460,7 @@ div.txt-animado {
 
 /*AGENDA*/
 .agenda {
-  transform: translateY(400px);
+  transform: translateY(300px);
   margin-top: 50px;
 }
 
@@ -470,11 +472,6 @@ div.txt-animado {
   margin-bottom: 20px;
 }
 
-.agenda-container iframe {
-    width: 100%;
-    height: 70vh;
-  }
-
 .agenda .fundo-agenda {
   z-index: -1;
   width: 100vw;
@@ -483,4 +480,28 @@ div.txt-animado {
   position: absolute;
   background-position: center;
   outline: 1px solid red;
+}
+
+form {
+  background: #C0392B;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border-radius: 10px;
+  width: 60vw;
+  margin-top: 20px;
+}
+
+form label input {
+  width: 100%;
+  margin: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+form label input .service {
+  width: 400px;
 }

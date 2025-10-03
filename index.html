@@ -108,10 +108,45 @@
       </section>
 
       <section class="agenda">
-        <img src="imagens/fundo-agenda.png" alt="Imagem do fundo" class="fundo-agenda" />
+        <img
+          src="imagens/fundo-agenda.png"
+          alt="Imagem do fundo"
+          class="fundo-agenda"
+        />
         <h1>Agende um Horário</h1>
-        <iframe class="agenda-container" src="https://calendar.google.com/calendar/embed?src=3bbd16c2885f147714d0563949998b2b3bdde11fe8d2fd7fa539ec2aa8868be8%40group.calendar.google.com&ctz=America%2FSao_Paulo" style="border: 0" width="100%" height="250px" frameborder="0" scrolling="no"></iframe>
-        
+
+        <iframe
+          src="https://calendar.google.com/calendar/embed?src=3bbd16c2885f147714d0563949998b2b3bdde11fe8d2fd7fa539ec2aa8868be8%40group.calendar.google.com&ctz=America%2FSao_Paulo"
+          style="border: 0"
+          width="100%"
+          height="500"
+          frameborder="0"
+          scrolling="no"
+        >
+        </iframe>
+
+        <form id="bookingForm">
+          <h2>Agende</h2>
+          <label>
+            <input type="text" id="name" required placeholder="Nome"/></label>
+          <label>
+            <input type="tel" id="phone" placeholder="Telefone" required />
+          </label>
+          <label>
+            <select id="service">
+              <option value="Corte">Corte</option>
+              <option value="Barba">Barba</option>
+              <option value="Corte + Barba">Corte + Barba</option>
+            </select>
+          </label>
+          <label>
+            <input type="date" id="date" required />
+          </label>
+          <label>
+            <input type="time" id="time" required />
+          </label>
+          <button type="submit">Confirmar Agendamento</button>
+        </form>
       </section>
     </main>
     <script src="script.js"></script>

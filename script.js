@@ -26,3 +26,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+  const button = document.getElementById('whatsappButton');
+  if (!button) return;
+
+  const threshold = 200; // px de rolagem antes de aparecer (ajuste se quiser)
+
+  // função que verifica scroll e alterna a classe
+  function checkScroll() {
+    if (window.scrollY > threshold) {
+      if (!button.classList.contains('show')) button.classList.add('show');
+    } else {
+      if (button.classList.contains('show')) button.classList.remove('show');
+    }
+  }
+
+  // checa imediatamente (útil se o usuário abriu a página já rolada)
+  checkScroll();
+
+  // ouvinte de scroll (passive para performance)
+  window.addEventListener('scroll', checkScroll, { passive: true });
+});
+
+
+

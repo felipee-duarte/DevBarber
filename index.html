@@ -9,45 +9,45 @@
   <body>
     <!--HEADER-->
     <div id="topo"></div>
-    <main class="main-page">
-      <header class="header" id="header">
-        <div class="logo">
-          <img src="imagens/logoBarber.png" alt="Mineradora Paulista Logo" />
+    <section class="home-page">
+      
+        <header class="header" id="header">
+          <div class="logo">
+            <img src="imagens/logoBarber.png" alt="Mineradora Paulista Logo" />
+          </div>
+          <label class="hamburger">
+            <input type="checkbox" id="checkbox" />
+            <svg viewBox="0 0 32 32">
+              <path
+                d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+                class="line line-top-bottom"
+              ></path>
+              <path d="M7 16 27 16" class="line"></path>
+            </svg>
+          </label>
+        </header>
+        <div class="menu-overlay">
+          <ul class="menu-links">
+            <li><a href="#header" class="menu-item">HOME</a></li>
+            <li>
+              <a href="paginas/saibaMais.html" class="menu-item">SOBRE NÓS</a>
+            </li>
+            <li><a href="#marcas" class="menu-item">NOSSOS SERVIÇOS</a></li>
+            <li><a href="#" class="menu-item">AGENDA</a></li>
+          </ul>
         </div>
-
-        <label class="hamburger">
-          <input type="checkbox" id="checkbox" />
-          <svg viewBox="0 0 32 32">
-            <path
-              d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
-              class="line line-top-bottom"
-            ></path>
-            <path d="M7 16 27 16" class="line"></path>
-          </svg>
-        </label>
-      </header>
-
-      <div class="menu-overlay">
-        <ul class="menu-links">
-          <li><a href="#header" class="menu-item">HOME</a></li>
-          <li>
-            <a href="paginas/saibaMais.html" class="menu-item">SOBRE NÓS</a>
-          </li>
-          <li><a href="#marcas" class="menu-item">NOSSOS SERVIÇOS</a></li>
-          <li><a href="#" class="menu-item">AGENDA</a></li>
-        </ul>
-      </div>
-
-      <!--HOME-->
-      <section class="hero-section">
-        <h1 class="txt-titulo">Agende já um horário para</h1>
-        <div class="txt-animado">fazer <span></span></div>
-        <p class="txt">Clique abaixo e garanta seu horário</p>
-        <a href="#form"
-          ><button class="btn-agenda">AGENDE UM HORÁRIO</button></a
-        >
-      </section>
-
+        <!--HOME-->
+        <section class="hero-section">
+          <h1 class="txt-titulo">Agende já um horário para</h1>
+          <div class="txt-animado">fazer <span></span></div>
+          <p class="txt">Clique abaixo e garanta seu horário</p>
+          <a href="#form"
+            ><button class="btn-agenda">AGENDE UM HORÁRIO</button></a
+          >
+        </section>
+      
+    </section>
+      <main>
       <!--SOBRE-->
       <section class="sobre">
         <img src="imagens/devfaixaP.jpg" alt="" />
@@ -104,21 +104,16 @@
         </div>
         <a href="#form"><button class="btn">AGENDE UM HORÁRIO</button></a>
         <img src="imagens/destaqueServiços.png" class="destaque" alt="" />
-        <img src="imagens/fundoServiços.png" class="fundo" alt="" />
+        
       </section>
 
       <section class="agenda">
-        <img
-          src="imagens/fundo-agenda.png"
-          alt="Imagem do fundo"
-          class="fundo-agenda"
-        />
         <h1>Agende um Horário</h1>
 
-        <iframe
+        <iframe class="google-agenda"
           src="https://calendar.google.com/calendar/embed?src=3bbd16c2885f147714d0563949998b2b3bdde11fe8d2fd7fa539ec2aa8868be8%40group.calendar.google.com&ctz=America%2FSao_Paulo"
           style="border: 0"
-          width="100%"
+          width="90%"
           height="500"
           frameborder="0"
           scrolling="no"
@@ -148,9 +143,9 @@
           <button type="submit">Confirmar Agendamento</button>
         </form>
       </section>
-
+      <iframe class="google-maps" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58949.65591133559!2d-47.92116395!3d-22.565878549999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c7baaa4b173567%3A0x39afa382f33b9f00!2sS%C3%A3o%20Pedro%2C%20SP%2C%2013520-000!5e0!3m2!1spt-BR!2sbr!4v1759509283189!5m2!1spt-BR!2sbr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       <section class="footer">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58949.65591133559!2d-47.92116395!3d-22.565878549999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94c7baaa4b173567%3A0x39afa382f33b9f00!2sS%C3%A3o%20Pedro%2C%20SP%2C%2013520-000!5e0!3m2!1spt-BR!2sbr!4v1759509283189!5m2!1spt-BR!2sbr" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        
       </section>
     </main>
     <script src="script.js"></script>

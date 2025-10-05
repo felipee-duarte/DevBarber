@@ -22,7 +22,7 @@ body {
 }
 
 /*HOME*/
-.main-page {
+.home-page {
     background: black;
     background-image: url('../imagens/fundo-home.png');
     background-size: cover;
@@ -33,9 +33,12 @@ body {
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
+    padding-bottom: 30px;
     box-sizing: border-box;
     color: #fff;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    margin-bottom: 50px;
+
 }
 
 .header {
@@ -63,7 +66,7 @@ body {
     font-weight: bold;
     margin-top: 50px;
     text-align: center;
-    margin-bottom: 10px;
+
 }
 
 div.txt-animado {
@@ -305,10 +308,8 @@ div.txt-animado {
 }
 
 /*SOBRE*/
-
 .sobre {
   display: flex;
-  transform: translateY(200px);
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -373,16 +374,8 @@ div.txt-animado {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  transform: translateY(250px);
-}
-
-.serviços .fundo {
-  z-index: -1;
-  width: 100vw;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  background-position: bottom;
+  margin-top: 50px;
+background: url(../imagens/fundoServiços.png) no-repeat center center / cover;
 }
 
 .serviços h1{
@@ -459,8 +452,10 @@ div.txt-animado {
 
 /*AGENDA*/
 .agenda {
-  transform: translateY(300px);
+  margin-top: 50px;
   margin-bottom: 50px;
+  background: url(../imagens/fundo-agenda.png) no-repeat center center / cover;
+  padding-bottom: 30px;
 }
 
 .agenda h1{
@@ -469,23 +464,20 @@ div.txt-animado {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
+  padding: 20px;
 }
 
-.agenda .fundo-agenda {
-  z-index: -1;
-  width: 100vw;
-  height: 100%;
-  transform: translateX(-20px);
-  object-fit: cover;
-  position: absolute;
-  background-position: center;
-  outline: 1px solid red;
+.google-agenda {
+  display: flex;
+  align-items: center;
+  margin: auto;
 }
 
 /* Estilo geral do formulário */
 #bookingForm {
   width: 70vw;
-  margin: 30px auto;
+  margin: auto;
+  margin-top:  30px;
   padding: 20px;
   background: #D62828;
   border-radius: 12px;
@@ -541,23 +533,21 @@ div.txt-animado {
 
 /* Hover do botão */
 #bookingForm button:hover {
-  background: #005fcc;
-  transform: scale(1.02);
+  background: #123F68;
+  box-shadow: 0 0 15px #ad0000;
+  transform: scale(1.03);
 }
 
-/* Responsividade */
-@media (max-width: 480px) {
-  #bookingForm {
-    padding: 15px;
-    gap: 12px;
-  }
-
-  #bookingForm h2 {
-    font-size: 1.3rem;
-  }
+.google-maps {
+  display: flex;
+  align-items: center;
+  margin: auto;
 }
 
 .footer {
-  transform: translateY(300px);
+  margin-top: 50px;
+ background-color: #D62828;
+ width: 100%;
+ height: 250px;
 }
 

@@ -227,7 +227,7 @@
 }
 
 .serviços {
- margin-bottom: 100px;
+ margin-bottom: 100px;  
 }
 
 .serviços .txt-p {
@@ -240,6 +240,10 @@
   height: 70px;
 }
 
+.serviços .cards {
+  max-width: 550px;
+}
+
 .agenda {
     margin-bottom: 100px;
 }
@@ -249,7 +253,7 @@
 }
 
 #bookingForm {
-    width: 60vw;
+    width: 40vw;
 }
 
 .google-maps {

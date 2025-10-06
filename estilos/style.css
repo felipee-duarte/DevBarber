@@ -301,7 +301,9 @@ div.txt-animado {
 
 /*SOBRE*/
 .sobre {
+  width: 90vw;
   display: flex;
+  margin: auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -327,6 +329,7 @@ div.txt-animado {
 
 .sobre .home-dev .txt-sobre p {
   color: black;
+  margin-top: 30px;
 }
 
 .sobre .home-dev .txt-sobre h1 {
@@ -352,6 +355,7 @@ div.txt-animado {
   font-weight: bold;
   text-transform: uppercase;
   transition: ease 0.5s all;
+  margin-top: 30px;
 }
 
 .btn:hover {
@@ -372,6 +376,7 @@ div.txt-animado {
 
 .serviços h1 {
   font-size: clamp(24px, 3vw, 48px);
+  margin: 50px 0  20px 0;
   color: black;
   text-align: center;
 }
@@ -391,6 +396,7 @@ div.txt-animado {
   justify-content: center;
   gap: 20px;
   margin: 0 20px;
+  margin-bottom: 20px;
 }
 
 .serviços .cards {
@@ -399,7 +405,7 @@ div.txt-animado {
   flex: 1 1 280px;
   justify-content: center;
   align-items: center;
-  max-width: 350px;
+  max-width: 330px;
   height: 250px;
   background: #eaeaea;
   border: 2px solid #c2c2c2;
@@ -418,7 +424,7 @@ div.txt-animado {
 }
 
 .serviços .cards h2 {
-  font-size: clamp(20px, 2.5vw, 40px);
+  font-size: clamp(20px, 2vw, 40px);
   color: black;
   text-align: center;
 }

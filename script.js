@@ -49,5 +49,24 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('scroll', checkScroll, { passive: true });
 });
 
+  function trocarImagem() {
+    const imagem = document.getElementById('minhaImagem');
+    const larguraTela = window.innerWidth;
+
+    if (larguraTela < 768) {
+      imagem.src = 'imagens/devfaixaP.jpg'; // celular
+    } else if (larguraTela < 1200) {
+      imagem.src = 'imagens/devfaixaM.png'; // tablet
+    } else {
+      imagem.src = 'imagens/devfaixaG.png'; // desktop
+    }
+  }
+
+  // Troca quando carregar e quando redimensionar
+  window.addEventListener('load', trocarImagem);
+  window.addEventListener('resize', trocarImagem);
+
+
+
 
 

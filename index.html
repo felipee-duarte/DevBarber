@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dev Barber</title>
     <link rel="stylesheet" href="estilos/style.css" />
+    <link rel="stylesheet" href="estilos/mediaquery.css">
     <link
       rel="shortcut icon"
       href="imagens/favicon-16x16.png"
@@ -75,43 +76,51 @@
       </section>
 
       <!--SERVIÇOS-->
-      <section class="serviços" >
+      <section class="serviços">
         <h1>Nossos Serviços</h1>
-        <p id="serviços">Um pouco dos cuidados que oferecemos para valorizar seu estilo.</p>
-
-        <div class="cards" >
-          <img src="imagens/cabelo.png" class="img-card" alt="Imagem Cabelo" />
-          <h2>Corte de Cabelo</h2>
-          <p>
-            Do clássico ao moderno, do social ao degrade, nosso profissionalismo
-            te oferecerá o melhor serviço e a experiência.
-          </p>
-        </div>
-        <div class="cards">
-          <img src="imagens/barba.png" class="img-card" alt="Imagem barba" />
-          <h2>Designe de Barba</h2>
-          <p>
-            Barba terapia ou barba simples, feita do estilo tradicional com
-            navalha, aplicação de toalha quente e produto de alta qualidade.
-          </p>
-        </div>
-        <div class="cards">
-          <img
-            src="imagens/sobrancelha.png"
-            class="img-card"
-            alt="Imagem sobrancelha"
-          />
-          <h2>Design de Sobrancelha</h2>
-          <p>Deixamos sua sobrancelha no estilo com o uso de navalha.</p>
+        <p id="serviços" class="txt-p">
+          Um pouco dos cuidados que oferecemos para valorizar seu estilo.
+        </p>
+        <div class="container">
+          <div class="cards">
+            <img
+              src="imagens/cabelo.png"
+              class="img-card"
+              alt="Imagem Cabelo"
+            />
+            <h2>Corte de Cabelo</h2>
+            <p>
+              Do clássico ao moderno, do social ao degrade, nosso
+              profissionalismo te oferecerá o melhor serviço e a experiência.
+            </p>
+          </div>
+          <div class="cards">
+            <img src="imagens/barba.png" class="img-card" alt="Imagem barba" />
+            <h2>Designe de Barba</h2>
+            <p>
+              Barba terapia ou barba simples, feita do estilo tradicional com
+              navalha, aplicação de toalha quente e produto de alta qualidade.
+            </p>
+          </div>
+          <div class="cards">
+            <img
+              src="imagens/sobrancelha.png"
+              class="img-card"
+              alt="Imagem sobrancelha"
+            />
+            <h2>Design de Sobrancelha</h2>
+            <p>Deixamos sua sobrancelha no estilo com o uso de navalha.</p>
+          </div>
         </div>
         <a href="#form"><button class="btn">AGENDE UM HORÁRIO</button></a>
         <img src="imagens/destaqueServiços.png" class="destaque" alt="" />
       </section>
 
-      <section class="agenda" >
+      <section class="agenda">
         <h1>Agende um Horário</h1>
 
-        <iframe id="agenda"
+        <iframe
+          id="agenda"
           class="google-agenda"
           src="https://calendar.google.com/calendar/embed?src=3bbd16c2885f147714d0563949998b2b3bdde11fe8d2fd7fa539ec2aa8868be8%40group.calendar.google.com&ctz=America%2FSao_Paulo"
           style="border: 0"

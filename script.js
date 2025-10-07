@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (larguraTela < 768) {
       imagem.src = 'imagens/devfaixaP.jpg'; // celular
     } else if (larguraTela < 1200) {
-      imagem.src = 'imagens/devfaixaM.png'; // tablet
+      imagem.src = 'imagens/devfaixaP.jpg'; // tablet
     } else {
       imagem.src = 'imagens/devfaixaG.png'; // desktop
     }
@@ -65,6 +65,27 @@ document.addEventListener('DOMContentLoaded', function () {
   // Troca quando carregar e quando redimensionar
   window.addEventListener('load', trocarImagem);
   window.addEventListener('resize', trocarImagem);
+
+  document.getElementById("bookingForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const data = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    service: document.getElementById("service").value,
+    date: document.getElementById("date").value,
+    time: document.getElementById("time").value
+  };
+
+  const res = await fetch("http://localhost:3000/agendar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  const json = await res.json();
+  alert(json.message);
+});
+
 
 
 

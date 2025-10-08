@@ -54,7 +54,7 @@
     <main>
       <!--SOBRE-->
       <section class="sobre" id="sobre">
-      <img id="minhaImagem" src="imagens/devfaixaP.jpg" alt="">
+        <img id="minhaImagem" src="imagens/devfaixaP.jpg" alt="" />
         <div class="home-dev">
           <div class="txt-sobre">
             <p>Sobre Nós</p>
@@ -132,25 +132,43 @@
 
         <form id="bookingForm">
           <h2>Agende</h2>
+
           <label>
-            <input type="text" id="name" required placeholder="Nome"
-          /></label>
-          <label>
-            <input type="tel" id="phone" placeholder="Telefone" required />
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              placeholder="Nome"
+            />
           </label>
+
           <label>
-            <select id="service">
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="Telefone"
+              required
+            />
+          </label>
+
+          <label>
+            <select id="service" name="service">
               <option value="Corte">Corte</option>
               <option value="Barba">Barba</option>
               <option value="Corte + Barba">Corte + Barba</option>
             </select>
           </label>
+
           <label>
-            <input type="date" id="date" required />
+            <input type="date" id="date" name="date" required />
           </label>
+
           <label>
-            <input type="time" id="time" required />
+            <input type="time" id="time" name="time" required />
           </label>
+
           <button type="submit">Confirmar Agendamento</button>
         </form>
       </section>

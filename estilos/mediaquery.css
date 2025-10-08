@@ -82,6 +82,9 @@
 }
 
 @media screen and (min-width: 992px) and (max-width: 1200px) {
+  :root {
+    --fundo-serviço: url(../imagens/servicos.png);
+  }
   /*DESKTOP*/
   .home-page {
     margin-bottom: 100px;
@@ -129,6 +132,7 @@
 
 .serviços {
  margin-bottom: 100px;
+ background: var(--fundo-serviço) no-repeat center center / cover;
 }
 
 .serviços .txt-p {
@@ -181,6 +185,9 @@
 }
 
 @media screen and (min-width: 1200px) {
+  :root {
+    --fundo-serviço: url(../imagens/servicos.png);
+  }
   /*TELAS GRANDES*/
   .home-page {
     margin-bottom: 100px;
@@ -227,7 +234,8 @@
 }
 
 .serviços {
- margin-bottom: 100px;  
+ margin-bottom: 100px; 
+  background: var(--fundo-serviço) no-repeat center center / cover; 
 }
 
 .serviços .txt-p {

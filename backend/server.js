@@ -44,6 +44,8 @@ app.get("/oauth2callback", async (req, res) => {
 // ====== ROTA 3 - AGENDAR ======
 app.post("/agendar", async (req, res) => {
   try {
+    console.log("📩 Requisição recebida:", req.body);
+
     const { name, phone, service, date, time } = req.body;
 
     // Carrega token salvo
@@ -62,22 +64,37 @@ app.post("/agendar", async (req, res) => {
       end: {
         dateTime: new Date(
           new Date(`${date}T${time}:00-03:00`).getTime() + 30 * 60000
-        ), // +30 min
+        ),
         timeZone: "America/Sao_Paulo",
       },
     };
 
-    await calendar.events.insert({
+    console.log("📅 Enviando evento:", event);
+
+    const response = await calendar.events.insert({
       calendarId: "primary",
       resource: event,
     });
 
+    console.log("✅ Evento criado:", response.data.htmlLink);
     res.json({ message: "Agendamento criado com sucesso!" });
   } catch (err) {
-    console.error(err);
+    console.error("❌ Erro ao criar agendamento:", err);
     res.status(500).json({ error: "Erro ao criar agendamento" });
   }
 });
+
+
+/*// ====== ROTA PARA GERAR NOVO TOKEN ======
+app.get("/gerar-token", (req, res) => {
+  const authUrl = oAuth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: SCOPES,
+  });
+  res.send(`Autorize o app clicando neste link: <a href="${authUrl}">${authUrl}</a>`);
+});
+*/
+
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);

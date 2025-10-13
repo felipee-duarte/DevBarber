@@ -92,6 +92,35 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+document.getElementById("submitBtn").addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const service = document.getElementById("service").value;
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+
+  const data = { name, phone, service, date, time };
+
+  try {
+    const response = await fetch("http://localhost:3000/agendar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    alert(result.message);
+  } catch (error) {
+    alert("Erro ao enviar agendamento");
+    console.error(error);
+  }
+});
+
+
+
+
 
 
 

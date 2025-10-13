@@ -1,5 +1,3 @@
-
-
 // server.js
 import express from "express";
 import cors from "cors";
@@ -15,8 +13,6 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-
-
 
 // ====== Autenticação Google ======
 const credentials = JSON.parse(fs.readFileSync("credentials.json"));
@@ -38,9 +34,9 @@ if (fs.existsSync(TOKEN_PATH)) {
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 
 // ====== Rota de teste ======
-app.get("/", (req, res) => {
+/*app.get("/", (req, res) => {
   res.send("Servidor rodando 🚀");
-});
+});*/
 
 // ====== Rota para receber o agendamento ======
 app.post("/agendar", async (req, res) => {
@@ -80,3 +76,4 @@ app.get("/", (req, res) => {
 });
 
 app.listen(3000, () => console.log("🚀 Servidor rodando na porta 3000"));
+

@@ -68,23 +68,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const data = {
-    name: document.getElementById("name").value,
-    phone: document.getElementById("phone").value,
-    service: document.getElementById("service").value,
-    date: document.getElementById("date").value,
-    time: document.getElementById("time").value
-  };
 
-  const res = await fetch("http://localhost:3000/agendar", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const service = document.getElementById("service").value;
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
 
-  const json = await res.json();
-  alert(json.message);
+  const data = { name, phone, service, date, time };
+
+  try {
+    const response = await fetch("http://localhost:3000/agendar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+    alert(result.message);
+  } catch (error) {
+    alert("Erro ao enviar agendamento");
+    console.error(error);
+  }
 });
+
 
 
 

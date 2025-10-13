@@ -1,58 +1,51 @@
-// backend/server.js
-const fs = require("fs");
-const express = require("express");
-const { google } = require("googleapis");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+
+
+// server.js
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { google } from "googleapis";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000;
-
 app.use(cors());
 app.use(bodyParser.json());
 
-const SCOPES = ["https://www.googleapis.com/auth/calendar"];
-const TOKEN_PATH = "token.json";
 
-// Carrega credenciais
-const credentials = require("./credentials.json");
+
+// ====== Autenticação Google ======
+const credentials = JSON.parse(fs.readFileSync("credentials.json"));
 const { client_secret, client_id, redirect_uris } = credentials.web;
+
 const oAuth2Client = new google.auth.OAuth2(
   client_id,
   client_secret,
   redirect_uris[0]
 );
 
-// ====== ROTA 1 - AUTENTICAR ======
-app.get("/auth", (req, res) => {
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: SCOPES,
-  });
-  res.redirect(authUrl);
+// carrega o token salvo
+const TOKEN_PATH = path.join(__dirname, "token.json");
+if (fs.existsSync(TOKEN_PATH)) {
+  const token = fs.readFileSync(TOKEN_PATH);
+  oAuth2Client.setCredentials(JSON.parse(token));
+}
+
+const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
+
+// ====== Rota de teste ======
+app.get("/", (req, res) => {
+  res.send("Servidor rodando 🚀");
 });
 
-// ====== ROTA 2 - CALLBACK DO GOOGLE ======
-app.get("/oauth2callback", async (req, res) => {
-  const code = req.query.code;
-  const { tokens } = await oAuth2Client.getToken(code);
-  oAuth2Client.setCredentials(tokens);
-  fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens));
-  res.send("✅ Token salvo com sucesso! Pode fechar essa aba.");
-});
-
-// ====== ROTA 3 - AGENDAR ======
+// ====== Rota para receber o agendamento ======
 app.post("/agendar", async (req, res) => {
   try {
-    console.log("📩 Requisição recebida:", req.body);
-
     const { name, phone, service, date, time } = req.body;
-
-    // Carrega token salvo
-    const token = JSON.parse(fs.readFileSync(TOKEN_PATH));
-    oAuth2Client.setCredentials(token);
-
-    const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 
     const event = {
       summary: `${service} - ${name}`,
@@ -69,33 +62,21 @@ app.post("/agendar", async (req, res) => {
       },
     };
 
-    console.log("📅 Enviando evento:", event);
-
-    const response = await calendar.events.insert({
+    await calendar.events.insert({
       calendarId: "primary",
       resource: event,
     });
 
-    console.log("✅ Evento criado:", response.data.htmlLink);
+    console.log("✅ Agendamento criado com sucesso!");
     res.json({ message: "Agendamento criado com sucesso!" });
-  } catch (err) {
-    console.error("❌ Erro ao criar agendamento:", err);
-    res.status(500).json({ error: "Erro ao criar agendamento" });
+  } catch (error) {
+    console.error("Erro ao criar evento:", error);
+    res.status(500).json({ message: "Erro ao criar agendamento" });
   }
 });
 
-
-/*// ====== ROTA PARA GERAR NOVO TOKEN ======
-app.get("/gerar-token", (req, res) => {
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: SCOPES,
-  });
-  res.send(`Autorize o app clicando neste link: <a href="${authUrl}">${authUrl}</a>`);
+app.get("/", (req, res) => {
+  res.send("Servidor rodando 🚀");
 });
-*/
 
-
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
-});
+app.listen(3000, () => console.log("🚀 Servidor rodando na porta 3000"));

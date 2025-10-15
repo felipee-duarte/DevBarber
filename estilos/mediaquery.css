@@ -29,7 +29,8 @@
   }
 
   .sobre img {
-    height: 500px;
+    height: 300px;
+    object-fit: cover;
   }
 
   .sobre .home-dev .barra {
@@ -53,6 +54,11 @@
 .serviços .txt-p {
   font-size: 1.25em;
   width: 500px;
+}
+
+.serviços img {
+  height: 300px;
+  object-fit: cover;
 }
 
 .serviços .btn {
@@ -109,7 +115,8 @@
   }
 
   .sobre img {
-    height: 500px;
+    height: 350px;
+    object-fit: cover;
   }
 
   .sobre .home-dev .barra {
@@ -138,6 +145,11 @@
 .serviços .txt-p {
   font-size: 1.5em;
   width: 500px;
+}
+
+.serviços img {
+  height: 350px;
+  object-fit: cover;
 }
 
 .serviços .btn {
@@ -212,7 +224,8 @@
   }
 
   .sobre img {
-    height: 500px;
+    height: 350px;
+    object-fit: cover;
   }
 
   .sobre .home-dev .barra {
@@ -233,6 +246,11 @@
   height: 70px;
 }
 
+.carousel-inner img {
+  height: 350px;
+  object-fit: cover;
+}
+
 .serviços {
  margin-bottom: 100px; 
   background: var(--fundo-serviço) no-repeat center center / cover; 
@@ -241,6 +259,11 @@
 .serviços .txt-p {
   font-size: 1.5em;
   width: 500px;
+}
+
+.serviços img {
+  height: 350px;
+  object-fit: cover;
 }
 
 .serviços .btn {

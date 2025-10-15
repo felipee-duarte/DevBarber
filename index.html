@@ -11,6 +11,10 @@
       href="imagens/favicon-16x16.png"
       type="image/x-icon"
     />
+    <link
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <!--HEADER-->
@@ -73,6 +77,26 @@
 
         <a href="#form"><button class="btn">AGENDE UM HORÁRIO</button></a>
       </section>
+      <div
+        id="carouselExampleSlidesOnly"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="imagens/Psobre1.png" class="d-block w-100" alt="..." />
+          </div>
+          <div class="carousel-item">
+            <img src="imagens/Psobre4.png" class="d-block w-100" alt="..." />
+          </div>
+          <div class="carousel-item">
+            <img src="imagens/Psobre2.png" class="d-block w-100" alt="..." />
+          </div>
+          <div class="carousel-item">
+            <img src="imagens/Psobre3.png" class="d-block w-100" alt="..." />
+          </div>
+        </div>
+      </div>
 
       <!--SERVIÇOS-->
       <section class="serviços">
@@ -130,8 +154,6 @@
         >
         </iframe>
 
-        
-
         <form id="bookingForm">
           <h2>Agende</h2>
 
@@ -172,7 +194,6 @@
           </label>
 
           <button type="button" id="submitBtn">Confirmar Agendamento</button>
-
         </form>
       </section>
       <iframe
@@ -219,36 +240,36 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <script>
-  const form = document.getElementById("bookingForm");
+      const form = document.getElementById("bookingForm");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const service = document.getElementById("service").value;
-    const date = document.getElementById("date").value;
-    const time = document.getElementById("time").value;
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const service = document.getElementById("service").value;
+        const date = document.getElementById("date").value;
+        const time = document.getElementById("time").value;
 
-    const data = { name, phone, service, date, time };
+        const data = { name, phone, service, date, time };
 
-    try {
-      const response = await fetch("http://localhost:3000/agendar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        try {
+          const response = await fetch("http://localhost:3000/agendar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+          alert(result.message || "Agendamento criado com sucesso!");
+          form.reset();
+        } catch (err) {
+          alert("Erro ao enviar o agendamento 😢");
+          console.error(err);
+        }
       });
+    </script>
 
-      const result = await response.json();
-      alert(result.message || "Agendamento criado com sucesso!");
-      form.reset();
-    } catch (err) {
-      alert("Erro ao enviar o agendamento 😢");
-      console.error(err);
-    }
-  });
-</script>
-
-
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

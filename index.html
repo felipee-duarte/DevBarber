@@ -145,7 +145,7 @@
         <iframe
           id="agenda"
           class="google-agenda"
-          src="https://calendar.google.com/calendar/embed?src=devfelipeds%40gmail.com&ctz=America%2FSao_Paulo"
+          src="https://calendar.google.com/calendar/embed?src=e81a1b9bbefb973b52b367be4f0398de584b43766ac42371f8685ecbc9e48aba%40group.calendar.google.com&ctz=America%2FSao_Paulo"
           style="border: 0"
           width="90%"
           height="500"
@@ -178,10 +178,13 @@
           </label>
 
           <label>
-            <select id="service" name="service">
-              <option value="Corte">Corte</option>
-              <option value="Barba">Barba</option>
-              <option value="Corte + Barba">Corte + Barba</option>
+            <select id="service" name="service" required>
+              <option value="" disabled selected>Selecione o serviço</option>
+              <option value="Corte" data-price="40">Corte - R$40</option>
+              <option value="Barba" data-price="30">Barba - R$30</option>
+              <option value="Corte + Barba" data-price="60">
+                Corte + Barba - R$60
+              </option>
             </select>
           </label>
 
@@ -192,6 +195,9 @@
           <label>
             <input type="time" id="time" name="time" required />
           </label>
+
+          <!-- Campo oculto que vai enviar o preço -->
+          <input type="hidden" id="price" name="price" />
 
           <button type="button" id="submitBtn">Confirmar Agendamento</button>
         </form>

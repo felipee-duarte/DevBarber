@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('load', trocarImagem);
   window.addEventListener('resize', trocarImagem);
 
-  document.getElementById("bookingForm").addEventListener("submit", async (e) => {
+document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("name").value;

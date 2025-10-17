@@ -31,11 +31,13 @@ if (fs.existsSync(TOKEN_PATH)) {
 }
 
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
+const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
 
-// ====== Rota de teste ======
-app.get("/", (req, res) => {
-    res.send("Servidor rodando 🚀");
-});
+// ====== IDs ======
+const CALENDAR_ID =
+    "e81a1b9bbefb973b52b367be4f0398de584b43766ac42371f8685ecbc9e48aba@group.calendar.google.com";
+const SPREADSHEET_ID = "10kdNuSRWYAYxyLlFsARp0gdLfL4RZcr8RNch_I32i4Y";
+const SHEET_NAME = "Tabela DevBarber";
 
 // ====== Função para validar horário ======
 function horarioValido(dateStr, timeStr) {
@@ -60,6 +62,14 @@ app.post("/agendar", async (req, res) => {
     try {
         const { name, phone, service, date, time } = req.body;
 
+        // 💰 Define valores para cada serviço
+        const valores = {
+            "Corte": 40,
+            "Barba": 30,
+            "Corte + Barba": 60,
+        };
+        const valor = valores[service] || 0;
+
         // 1️⃣ Verifica se está dentro do horário permitido
         if (!horarioValido(date, time)) {
             return res.status(400).json({
@@ -73,8 +83,7 @@ app.post("/agendar", async (req, res) => {
 
         // 3️⃣ Verifica se já existe evento no mesmo horário
         const events = await calendar.events.list({
-            calendarId:
-                "e81a1b9bbefb973b52b367be4f0398de584b43766ac42371f8685ecbc9e48aba@group.calendar.google.com",
+            calendarId: CALENDAR_ID,
             timeMin: startDateTime.toISOString(),
             timeMax: endDateTime.toISOString(),
             singleEvents: true,
@@ -87,7 +96,7 @@ app.post("/agendar", async (req, res) => {
             });
         }
 
-        // 4️⃣ Cria o evento
+        // 4️⃣ Cria o evento na Agenda
         const event = {
             summary: `${service} - ${name}`,
             description: `Telefone: ${phone}`,
@@ -102,18 +111,27 @@ app.post("/agendar", async (req, res) => {
         };
 
         await calendar.events.insert({
-            calendarId:
-                "e81a1b9bbefb973b52b367be4f0398de584b43766ac42371f8685ecbc9e48aba@group.calendar.google.com",
+            calendarId: CALENDAR_ID,
             resource: event,
         });
 
-        console.log("✅ Agendamento criado com sucesso!");
+        // 5️⃣ Envia também para o Google Sheets
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_NAME}!A:F`,
+            valueInputOption: "USER_ENTERED",
+            requestBody: {
+                values: [[name, phone, service, date, time, valor]],
+            },
+        });
+
+        console.log("✅ Agendamento criado e registrado na planilha!");
         res.json({ message: "Agendamento criado com sucesso!" });
     } catch (error) {
-        console.error("❌ Erro ao criar evento:", error.message || error);
+        console.error("❌ Erro ao criar agendamento:", error);
         res.status(500).json({
             message:
-                "Erro ao criar agendamento. Verifique logs do servidor para o erro da API.",
+                "Erro ao criar agendamento. Verifique logs do servidor para detalhes.",
         });
     }
 });

@@ -371,7 +371,7 @@ div.txt-animado {
 .carrossel {
     /* Ocupa 100% da largura da tela */
     width: 100vw; 
-    margin: 20px;
+    margin-top: 20px;
     overflow: hidden;
     position: relative;
 }
@@ -400,8 +400,8 @@ div.txt-animado {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  margin-top: 50px;
-  background: var(--fundo-serviço) no-repeat center center / cover;
+  margin-top: 20px;
+  background: linear-gradient(to bottom, white 0%, #ff0000 100%);
 }
 
 .serviços h1 {

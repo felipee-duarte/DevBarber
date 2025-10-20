@@ -198,11 +198,12 @@
 
 @media screen and (min-width: 1200px) {
   :root {
-    --fundo-serviço: url(../imagens/FundoS-G.png);
+    --fundo-serviço: url(../imagens/fundo-homeG.png);
   }
   /*TELAS GRANDES*/
   .home-page {
     margin-bottom: 100px;
+
   }
 
   .logo img {
@@ -258,7 +259,6 @@
 
 .serviços {
  margin-bottom: 100px; 
-  background: var(--fundo-serviço) no-repeat bottom / cover; 
 }
 
 .serviços p {

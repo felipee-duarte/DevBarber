@@ -31,6 +31,7 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  object-fit: cover;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -315,7 +316,6 @@ div.txt-animado {
 
 .sobre img {
   width: 100vw;
-  height: 200px;
   object-fit: cover;
 }
 
@@ -368,6 +368,31 @@ div.txt-animado {
   box-shadow: 0 0 15px #c80101;
 }
 
+.carrossel {
+    /* Ocupa 100% da largura da tela */
+    width: 100vw; 
+    margin: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.slides {
+    /* Container que desliza com todas as imagens */
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: fit-content; 
+}
+
+.slides img {
+    /* Cada imagem ocupa 100% da largura da tela */
+    width: 100vw; 
+    height: auto;
+    flex-shrink: 0; 
+    object-fit: cover;
+    /* Adicione uma altura mínima aqui se suas imagens tiverem alturas diferentes */
+    /* min-height: 400px; */ 
+}
+
 /*SERVIÇOS*/
 .serviços {
   display: flex;
@@ -381,16 +406,15 @@ div.txt-animado {
 
 .serviços h1 {
   font-size: clamp(24px, 3vw, 48px);
-  margin: 50px 0  20px 0;
+  margin: 50px 0  5px 0;
   color: black;
   text-align: center;
 }
 
 .serviços p {
-  font-size: clamp(16px, 1vw, 20px);
-  color: black;
-  text-align: center;
-  width: 280px;
+  font-size: clamp(16px, 1.5vw, 20px);
+  text-align: justify;
+  width: 80%;
 }
 
 .serviços .container {
@@ -410,8 +434,8 @@ div.txt-animado {
   flex: 1 1 280px;
   justify-content: center;
   align-items: center;
-  max-width: 330px;
-  height: 250px;
+  max-width: 350px;
+  height: 300px;
   background: #eaeaea;
   border: 2px solid #c2c2c2;
   border-radius: 20px;
@@ -425,17 +449,18 @@ div.txt-animado {
 }
 
 .serviços .img-card {
-  width: 100px;
+  max-width: 150px;
+  margin: 5px;
 }
 
 .serviços .cards h2 {
-  font-size: clamp(20px, 2vw, 40px);
+  font-size: clamp(20px, 1.5vw, 40px);
   color: black;
   text-align: center;
 }
 
 .serviços .cards p {
-  font-size: clamp(16px, 0.5vw, 20px);
+  font-size: clamp(16px, 1.5vw, 20px);
   color: black;
   text-align: center;
 }
@@ -474,7 +499,8 @@ div.txt-animado {
 
 .agenda h1 {
   font-size: clamp(24px, 2.7vw, 48px);
-  color: #d62828;
+  color: #ffffff;
+  text-shadow: 2px 2px 20px #d62828;
   text-align: center;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -584,12 +610,12 @@ div.txt-animado {
 }
 
 .footer h2 {
-  font-size: clamp(20px, 2.5vw, 45px);
+  font-size: clamp(20px, 2vw, 45px);
   color: white;
 }
 
 .footer p {
-  font-size: clamp(16px, 0.7vw, 20px);
+  font-size: clamp(16px, 1.5vw, 20px);
   color: white;
   
 }

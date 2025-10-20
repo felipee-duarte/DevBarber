@@ -198,7 +198,7 @@
 
 @media screen and (min-width: 1200px) {
   :root {
-    --fundo-serviço: url(../imagens/servicos.png);
+    --fundo-serviço: url(../imagens/FundoS-G.png);
   }
   /*TELAS GRANDES*/
   .home-page {
@@ -206,7 +206,7 @@
   }
 
   .logo img {
-    width: 300px;
+    width: 250px;
   }
 
   .menu-item {
@@ -227,6 +227,10 @@
     height: 350px;
     object-fit: cover;
   }
+  
+  .sobre .txt {
+    font-size: 1.5em;
+  }
 
   .sobre .home-dev .barra {
   width: 65vw;
@@ -244,6 +248,7 @@
 .sobre .btn {
   width: 250px;
   height: 70px;
+  margin-bottom: 50px;
 }
 
 .carousel-inner img {
@@ -253,7 +258,11 @@
 
 .serviços {
  margin-bottom: 100px; 
-  background: var(--fundo-serviço) no-repeat center center / cover; 
+  background: var(--fundo-serviço) no-repeat bottom / cover; 
+}
+
+.serviços p {
+  width: 90%;
 }
 
 .serviços .txt-p {
@@ -275,6 +284,11 @@
   max-width: 550px;
 }
 
+.serviços .img-card {
+  max-width: 200px;
+  margin: 5px;
+}
+
 .agenda {
     margin-bottom: 100px;
 }
@@ -282,6 +296,11 @@
 .agenda h1 {
     font-size: 2.25em;
 }
+
+.google-agenda {
+  width: 60vw;
+}
+
 
 #bookingForm {
     width: 40vw;

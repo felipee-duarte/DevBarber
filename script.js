@@ -49,18 +49,53 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('scroll', checkScroll, { passive: true });
 });
 
+function trocarImg() {
+  const imagem = document.getElementById('faixada');
+  const larguraTela = window.innerWidth;
+
+  if (larguraTela < 768) {
+    imagem.src = 'imagens/Sobre-P.png'; // celular
+  } else if (larguraTela < 1200) {
+    imagem.src = 'imagens/Sobre-M.png'; // tablet
+  } else {
+    imagem.src = 'imagens/Sobre-G.png'; // desktop
+  }
+}
+
   function trocarImagem() {
     const imagem = document.getElementById('minhaImagem');
     const larguraTela = window.innerWidth;
 
     if (larguraTela < 768) {
-      imagem.src = 'imagens/devfaixaP.jpg'; // celular
+      imagem.src = 'imagens/Servico-P.png'; // celular
     } else if (larguraTela < 1200) {
-      imagem.src = 'imagens/devfaixaP.jpg'; // tablet
+      imagem.src = 'imagens/Servico-M.png'; // tablet
     } else {
-      imagem.src = 'imagens/devfaixaG.png'; // desktop
+      imagem.src = 'imagens/Servico-G.png'; // desktop
     }
   }
+
+const slidesContainer = document.querySelector('.slides');
+const slides = document.querySelectorAll('.slides img');
+const slideWidth = slides[0].clientWidth; // Pega a largura de um slide
+let index = 0; // Índice do slide atual
+const tempoTroca = 5000; // Tempo em milissegundos (3 segundos)
+
+function mostrarSlide() {
+  // Calcula o quanto o contêiner de slides deve se mover (em pixels)
+  // O movimento é a largura de um slide * o índice atual
+  const offset = -index * slideWidth;
+  slidesContainer.style.transform = `translateX(${offset}px)`;
+}
+
+// 🔁 Função de Carrossel Automático
+function proximoSlideAutomatico() {
+  index = (index + 1) % slides.length; // Avança para o próximo, voltando ao 0 se chegar ao final
+  mostrarSlide();
+}
+
+// Inicia a troca automática
+setInterval(proximoSlideAutomatico, tempoTroca);
 
   // Troca quando carregar e quando redimensionar
   window.addEventListener('load', trocarImagem);

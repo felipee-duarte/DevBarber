@@ -79,7 +79,7 @@ app.post("/agendar", async (req, res) => {
 
         // 2️⃣ Converte hora início e fim
         const startDateTime = new Date(`${date}T${time}:00-03:00`);
-        const endDateTime = new Date(startDateTime.getTime() + 30 * 60000);
+        const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
 
         // 3️⃣ Verifica se já existe evento no mesmo horário
         const events = await calendar.events.list({
@@ -99,7 +99,7 @@ app.post("/agendar", async (req, res) => {
         // 4️⃣ Cria o evento na Agenda
         const event = {
             summary: `${service} - ${name}`,
-            description: `Telefone: ${phone}`,
+            /*description: `Telefone: ${phone}`,*/
             start: {
                 dateTime: startDateTime.toISOString(),
                 timeZone: "America/Sao_Paulo",

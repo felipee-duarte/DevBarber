@@ -113,7 +113,7 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   const data = { name, phone, service, date, time };
 
   try {
-    const response = await fetch("http://localhost:3000/agendar", {
+    const response = await fetch("https://dev-barber-xi.vercel.app/agendar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),

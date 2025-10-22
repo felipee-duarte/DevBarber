@@ -276,17 +276,28 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// === Configuração do CORS ===
-app.use(
-    cors({
-        origin: "https://dev-barber-n8uz.vercel.app", // domínio do front-end
-        methods: ["GET", "POST", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-    })
-);
+// === Configuração do CORS (corrigida) ===
+app.use((req, res, next) => {
+    const allowedOrigins = [
+        "https://dev-barber-n8uz.vercel.app", // frontend (onde está o site)
+        "https://dev-barber-xi.vercel.app", // backend (domínio da API)
+    ];
 
-// Habilita respostas automáticas a requisições OPTIONS (preflight)
-app.options("*", cors());
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+
+    if (req.method === "OPTIONS") {
+        return res.status(204).end(); // Responde o preflight sem erro
+    }
+
+    next();
+});
 
 app.use(bodyParser.json());
 
@@ -307,7 +318,7 @@ oAuth2Client.setCredentials(token);
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
 
-// === IDs da Agenda e Planilha (também no Vercel) ===
+// === IDs da Agenda e Planilha (variáveis no Vercel) ===
 const CALENDAR_ID = process.env.CALENDAR_ID;
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const SHEET_NAME = process.env.SHEET_NAME;
@@ -318,9 +329,9 @@ function horarioValido(dateStr, timeStr) {
     const dia = date.getDay();
     const hora = date.getHours();
 
-    if (dia === 0) return false;
-    if (dia >= 1 && dia <= 5) return hora >= 9 && hora < 18;
-    if (dia === 6) return hora >= 9 && hora < 13;
+    if (dia === 0) return false; // domingo
+    if (dia >= 1 && dia <= 5) return hora >= 9 && hora < 18; // segunda a sexta
+    if (dia === 6) return hora >= 9 && hora < 13; // sábado
     return false;
 }
 
@@ -345,6 +356,7 @@ app.post("/agendar", async (req, res) => {
         const startDateTime = new Date(`${date}T${time}:00-03:00`);
         const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
 
+        // Verifica se já existe um evento no horário escolhido
         const events = await calendar.events.list({
             calendarId: CALENDAR_ID,
             timeMin: startDateTime.toISOString(),
@@ -359,6 +371,7 @@ app.post("/agendar", async (req, res) => {
             });
         }
 
+        // Cria evento na agenda do Google
         const event = {
             summary: `${service} - ${name}`,
             start: {
@@ -376,6 +389,7 @@ app.post("/agendar", async (req, res) => {
             resource: event,
         });
 
+        // Registra os dados na planilha
         await sheets.spreadsheets.values.append({
             spreadsheetId: SPREADSHEET_ID,
             range: `${SHEET_NAME}!A:F`,

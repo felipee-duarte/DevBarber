@@ -263,37 +263,27 @@ export default app;*/
 
 // server.js
 import express from "express";
-import cors from "cors";
 import bodyParser from "body-parser";
 import { google } from "googleapis";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// === Configuração de caminhos ===
+// === Caminhos ===
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// === Configuração do CORS (corrigida) ===
+// ✅ Middleware CORS manual — resolve o preflight
 app.use((req, res, next) => {
-    const allowedOrigins = [
-        "https://dev-barber-n8uz.vercel.app", // frontend (onde está o site)
-        "https://dev-barber-xi.vercel.app", // backend (domínio da API)
-    ];
-
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-    }
-
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
+    const allowedOrigin = "https://dev-barber-n8uz.vercel.app"; // frontend na Vercel
+    res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
     if (req.method === "OPTIONS") {
-        return res.status(204).end(); // Responde o preflight sem erro
+        return res.sendStatus(204); // resposta pro preflight
     }
 
     next();
@@ -301,7 +291,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-// === Credenciais Google (via variáveis de ambiente no Vercel) ===
+// === Credenciais Google ===
 const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
 const token = JSON.parse(process.env.GOOGLE_TOKEN);
 
@@ -318,24 +308,24 @@ oAuth2Client.setCredentials(token);
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
 
-// === IDs da Agenda e Planilha (variáveis no Vercel) ===
+// === IDs (configurados no painel da Vercel) ===
 const CALENDAR_ID = process.env.CALENDAR_ID;
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const SHEET_NAME = process.env.SHEET_NAME;
 
-// === Função para validar horário ===
+// === Função pra validar horário ===
 function horarioValido(dateStr, timeStr) {
     const date = new Date(`${dateStr}T${timeStr}:00-03:00`);
     const dia = date.getDay();
     const hora = date.getHours();
 
-    if (dia === 0) return false; // domingo
-    if (dia >= 1 && dia <= 5) return hora >= 9 && hora < 18; // segunda a sexta
-    if (dia === 6) return hora >= 9 && hora < 13; // sábado
+    if (dia === 0) return false;
+    if (dia >= 1 && dia <= 5) return hora >= 9 && hora < 18;
+    if (dia === 6) return hora >= 9 && hora < 13;
     return false;
 }
 
-// === Rota para receber o agendamento ===
+// === Rota de agendamento ===
 app.post("/agendar", async (req, res) => {
     try {
         const { name, phone, service, date, time } = req.body;
@@ -356,7 +346,6 @@ app.post("/agendar", async (req, res) => {
         const startDateTime = new Date(`${date}T${time}:00-03:00`);
         const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
 
-        // Verifica se já existe um evento no horário escolhido
         const events = await calendar.events.list({
             calendarId: CALENDAR_ID,
             timeMin: startDateTime.toISOString(),
@@ -371,7 +360,6 @@ app.post("/agendar", async (req, res) => {
             });
         }
 
-        // Cria evento na agenda do Google
         const event = {
             summary: `${service} - ${name}`,
             start: {
@@ -389,7 +377,6 @@ app.post("/agendar", async (req, res) => {
             resource: event,
         });
 
-        // Registra os dados na planilha
         await sheets.spreadsheets.values.append({
             spreadsheetId: SPREADSHEET_ID,
             range: `${SHEET_NAME}!A:F`,
@@ -409,5 +396,5 @@ app.post("/agendar", async (req, res) => {
     }
 });
 
-// 🚀 Exporta o app para o Vercel
+// Exporta app pro Vercel
 export default app;

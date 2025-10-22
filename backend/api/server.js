@@ -266,52 +266,57 @@ import cors from "cors";
 import { google } from "googleapis";
 import fs from "fs";
 
-// === CONFIGURAÇÕES GERAIS ===
 const app = express();
 app.use(express.json());
 
-// === LIBERAÇÃO DO CORS ===
-app.use(cors({
-    origin: "*", // pode trocar pelo domínio do front depois
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"]
-}));
+// CORS com segurança
+app.use(cors());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    if (req.method === "OPTIONS") return res.sendStatus(204);
+    next();
+});
 
-// === CARREGANDO CREDENCIAIS E TOKEN ===
+// === GOOGLE CONFIG ===
 const credentials = JSON.parse(fs.readFileSync("credentials.json"));
 const token = JSON.parse(fs.readFileSync("token.json"));
 
 const { client_secret, client_id, redirect_uris } = credentials.installed;
-const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
+const oAuth2Client = new google.auth.OAuth2(
+    client_id,
+    client_secret,
+    redirect_uris[0]
+);
 oAuth2Client.setCredentials(token);
 
-// === CONFIG DO CALENDAR E SHEETS ===
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
 
-// ID da planilha e do calendário (use variáveis de ambiente na Vercel)
+// IDs vindos da Vercel
 const CALENDAR_ID = process.env.CALENDAR_ID;
 const SHEET_ID = process.env.SHEET_ID;
 
-// === ROTA PRINCIPAL PARA AGENDAMENTO ===
+// === ROTA DE TESTE ===
+app.get("/", (req, res) => {
+    res.status(200).send("🚀 API DevBarber funcionando com CORS liberado!");
+});
+
+// === ROTA PRINCIPAL ===
 app.post("/agendar", async (req, res) => {
     try {
         const { nome, telefone, servico, data, horario } = req.body;
 
-        // === 1️⃣ Adiciona o evento no Google Calendar ===
         const event = {
             summary: `Agendamento: ${servico}`,
             description: `Cliente: ${nome}\nTelefone: ${telefone}`,
-            start: { dateTime: `${data}T${horario}:00-03:00` },
-            end: { dateTime: `${data}T${horario}:00-03:00` },
+            start: { dateTime: `${data}T${horario}:00-03:00`, timeZone: "America/Sao_Paulo" },
+            end: { dateTime: `${data}T${horario}:00-03:00`, timeZone: "America/Sao_Paulo" },
         };
 
-        await calendar.events.insert({
-            calendarId: CALENDAR_ID,
-            resource: event,
-        });
+        await calendar.events.insert({ calendarId: CALENDAR_ID, resource: event });
 
-        // === 2️⃣ Adiciona os dados na Planilha ===
         await sheets.spreadsheets.values.append({
             spreadsheetId: SHEET_ID,
             range: "A:E",
@@ -321,17 +326,13 @@ app.post("/agendar", async (req, res) => {
             },
         });
 
-        res.status(200).json({ message: "Agendamento criado com sucesso!" });
+        res.status(200).json({ message: "✅ Agendamento criado com sucesso!" });
     } catch (error) {
         console.error("Erro ao agendar:", error);
         res.status(500).json({ error: "Erro ao agendar horário." });
     }
 });
 
-// === TESTE DE CONEXÃO ===
-app.get("/", (req, res) => {
-    res.send("🚀 API DevBarber rodando com sucesso!");
-});
-
 // === EXPORT PARA VERCEL ===
 export default app;
+

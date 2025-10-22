@@ -262,35 +262,32 @@ app.post("/agendar", async (req, res) => {
 export default app;*/
 
 export default async function handler(req, res) {
-    // Configuração de CORS
+    // ===== CORS =====
     res.setHeader("Access-Control-Allow-Origin", "https://dev-barber-n8uz.vercel.app");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-    // Permitir requisições OPTIONS (preflight)
+    // Permite requisições OPTIONS (pré-verificação do navegador)
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
 
-    // --- A partir daqui, seu código real de agendamento ---
+    // ===== ROTA REAL =====
     if (req.method === "POST") {
         try {
             const body = req.body;
+            console.log("📥 Dados recebidos:", body);
 
-            // Exemplo: processar os dados enviados pelo formulário
-            console.log("Dados recebidos:", body);
+            // Aqui você coloca a lógica de agendamento no Google Agenda e Sheets
 
-            // Retorna sucesso
-            return res.status(200).json({ message: "Agendamento recebido com sucesso!" });
+            return res.status(200).json({ message: "Agendamento criado com sucesso!" });
         } catch (error) {
-            console.error("Erro ao processar:", error);
-            return res.status(500).json({ message: "Erro no servidor" });
+            console.error("❌ Erro no agendamento:", error);
+            return res.status(500).json({ message: "Erro interno do servidor" });
         }
-    } else {
-        res.setHeader("Allow", ["POST", "OPTIONS"]);
-        return res.status(405).end(`Método ${req.method} não permitido`);
     }
-}
 
+    return res.status(405).json({ message: "Método não permitido" });
+}
 
 

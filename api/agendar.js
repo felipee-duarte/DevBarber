@@ -263,24 +263,25 @@ export default app;*/
 
 import { google } from "googleapis";
 
+// === Função API do Vercel ===
 export default async function handler(req, res) {
-    // 🔹 Configuração de CORS (necessária para o navegador aceitar a requisição)
+    // === Configuração de CORS ===
     res.setHeader("Access-Control-Allow-Origin", "https://dev-barber-n8uz.vercel.app");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
 
-    // 🔹 Responde imediatamente ao preflight
+    // Responde imediatamente ao preflight
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
 
-    // 🔹 Bloqueia qualquer método que não seja POST
+    // Bloqueia qualquer método que não seja POST
     if (req.method !== "POST") {
         return res.status(405).json({ message: "Método não permitido" });
     }
 
     try {
-        // 🔹 Credenciais e autenticação
+        // === Credenciais e autenticação ===
         const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
         const token = JSON.parse(process.env.GOOGLE_TOKEN);
         const { client_secret, client_id, redirect_uris } = credentials.web;
@@ -305,7 +306,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: "Preencha todos os campos." });
         }
 
-        // 🔹 Validação de horário comercial
+        // === Validação de horário comercial ===
         const dateObj = new Date(`${date}T${time}:00-03:00`);
         const dia = dateObj.getDay();
         const hora = dateObj.getHours();
@@ -318,7 +319,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: "❌ Fora do horário comercial." });
         }
 
-        // 🔹 Verifica conflitos de horário
+        // === Verifica conflitos de horário ===
         const startDateTime = new Date(`${date}T${time}:00-03:00`);
         const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
 
@@ -334,7 +335,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: "⚠️ Este horário já está ocupado." });
         }
 
-        // 🔹 Cria evento no Google Calendar
+        // === Cria evento no Google Calendar ===
         const event = {
             summary: `${service} - ${name}`,
             start: { dateTime: startDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
@@ -343,7 +344,7 @@ export default async function handler(req, res) {
 
         await calendar.events.insert({ calendarId: CALENDAR_ID, resource: event });
 
-        // 🔹 Salva no Google Sheets
+        // === Salva no Google Sheets ===
         await sheets.spreadsheets.values.append({
             spreadsheetId: SPREADSHEET_ID,
             range: `${SHEET_NAME}!A:E`,

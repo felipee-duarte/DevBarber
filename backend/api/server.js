@@ -261,29 +261,30 @@ app.post("/agendar", async (req, res) => {
 // 🚀 Exporta o app para o Vercel
 export default app;*/
 
-import express from "express";
 import cors from "cors";
+import express from "express";
 import { google } from "googleapis";
 import fs from "fs";
 
 const app = express();
-app.use(express.json());
 
-// CORS com segurança
-app.use(cors());
+// 🔹 Middleware manual de CORS (garante retorno no ambiente serverless)
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    if (req.method === "OPTIONS") return res.sendStatus(204);
+    res.setHeader("Access-Control-Allow-Origin", "https://dev-barber-n8uz.vercel.app"); // teu front
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    if (req.method === "OPTIONS") return res.status(200).end();
     next();
 });
 
-// === GOOGLE CONFIG ===
-const credentials = JSON.parse(fs.readFileSync("credentials.json"));
-const token = JSON.parse(fs.readFileSync("token.json"));
+app.use(express.json());
 
-const { client_secret, client_id, redirect_uris } = credentials.installed;
+// === GOOGLE AUTH CONFIG ===
+const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+const token = JSON.parse(process.env.GOOGLE_TOKEN);
+
+const { client_secret, client_id, redirect_uris } = credentials.web;
+
 const oAuth2Client = new google.auth.OAuth2(
     client_id,
     client_secret,
@@ -294,45 +295,65 @@ oAuth2Client.setCredentials(token);
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
 
-// IDs vindos da Vercel
 const CALENDAR_ID = process.env.CALENDAR_ID;
-const SHEET_ID = process.env.SHEET_ID;
+const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+const SHEET_NAME = process.env.SHEET_NAME;
 
-// === ROTA DE TESTE ===
-app.get("/", (req, res) => {
-    res.status(200).send("🚀 API DevBarber funcionando com CORS liberado!");
-});
+function horarioValido(dateStr, timeStr) {
+    const date = new Date(`${dateStr}T${timeStr}:00-03:00`);
+    const dia = date.getDay();
+    const hora = date.getHours();
 
-// === ROTA PRINCIPAL ===
-app.post("/agendar", async (req, res) => {
+    if (dia === 0) return false;
+    if (dia >= 1 && dia <= 5) return hora >= 9 && hora < 18;
+    if (dia === 6) return hora >= 9 && hora < 13;
+    return false;
+}
+
+app.post("/api/agendar", async (req, res) => {
     try {
-        const { nome, telefone, servico, data, horario } = req.body;
+        const { name, phone, service, date, time } = req.body;
+
+        if (!horarioValido(date, time)) {
+            return res.status(400).json({ message: "❌ Fora do horário comercial." });
+        }
+
+        const startDateTime = new Date(`${date}T${time}:00-03:00`);
+        const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
+
+        const events = await calendar.events.list({
+            calendarId: CALENDAR_ID,
+            timeMin: startDateTime.toISOString(),
+            timeMax: endDateTime.toISOString(),
+            singleEvents: true,
+            orderBy: "startTime",
+        });
+
+        if (events.data.items.length > 0) {
+            return res.status(400).json({ message: "⚠️ Este horário já está ocupado." });
+        }
 
         const event = {
-            summary: `Agendamento: ${servico}`,
-            description: `Cliente: ${nome}\nTelefone: ${telefone}`,
-            start: { dateTime: `${data}T${horario}:00-03:00`, timeZone: "America/Sao_Paulo" },
-            end: { dateTime: `${data}T${horario}:00-03:00`, timeZone: "America/Sao_Paulo" },
+            summary: `${service} - ${name}`,
+            start: { dateTime: startDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
+            end: { dateTime: endDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
         };
 
         await calendar.events.insert({ calendarId: CALENDAR_ID, resource: event });
 
         await sheets.spreadsheets.values.append({
-            spreadsheetId: SHEET_ID,
-            range: "A:E",
-            valueInputOption: "RAW",
-            requestBody: {
-                values: [[nome, telefone, servico, data, horario]],
-            },
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_NAME}!A:F`,
+            valueInputOption: "USER_ENTERED",
+            requestBody: { values: [[name, phone, service, date, time]] },
         });
 
         res.status(200).json({ message: "✅ Agendamento criado com sucesso!" });
     } catch (error) {
-        console.error("Erro ao agendar:", error);
-        res.status(500).json({ error: "Erro ao agendar horário." });
+        console.error("❌ Erro no agendamento:", error);
+        res.status(500).json({ message: "Erro interno no servidor." });
     }
 });
 
-// === EXPORT PARA VERCEL ===
 export default app;
 

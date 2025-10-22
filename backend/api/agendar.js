@@ -261,63 +261,61 @@ app.post("/agendar", async (req, res) => {
 // 🚀 Exporta o app para o Vercel
 export default app;*/
 
-import cors from "cors";
-import express from "express";
 import { google } from "googleapis";
-import fs from "fs";
 
-const app = express();
+export default async function handler(req, res) {
+    // 🔹 CORS manual (funciona em ambiente serverless)
+    res.setHeader("Access-Control-Allow-Origin", "https://dev-barber-n8uz.vercel.app");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
 
-// 🔹 Middleware manual de CORS (garante retorno no ambiente serverless)
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "https://dev-barber-n8uz.vercel.app"); // teu front
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    if (req.method === "OPTIONS") return res.status(200).end();
-    next();
-});
+    if (req.method === "OPTIONS") {
+        return res.status(200).end(); // Responde o preflight
+    }
 
-app.use(express.json());
+    if (req.method !== "POST") {
+        return res.status(405).json({ message: "Método não permitido" });
+    }
 
-// === GOOGLE AUTH CONFIG ===
-const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-const token = JSON.parse(process.env.GOOGLE_TOKEN);
-
-const { client_secret, client_id, redirect_uris } = credentials.web;
-
-const oAuth2Client = new google.auth.OAuth2(
-    client_id,
-    client_secret,
-    redirect_uris[0]
-);
-oAuth2Client.setCredentials(token);
-
-const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
-const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
-
-const CALENDAR_ID = process.env.CALENDAR_ID;
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
-const SHEET_NAME = process.env.SHEET_NAME;
-
-function horarioValido(dateStr, timeStr) {
-    const date = new Date(`${dateStr}T${timeStr}:00-03:00`);
-    const dia = date.getDay();
-    const hora = date.getHours();
-
-    if (dia === 0) return false;
-    if (dia >= 1 && dia <= 5) return hora >= 9 && hora < 18;
-    if (dia === 6) return hora >= 9 && hora < 13;
-    return false;
-}
-
-app.post("/api/agendar", async (req, res) => {
     try {
+        const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+        const token = JSON.parse(process.env.GOOGLE_TOKEN);
+        const { client_secret, client_id, redirect_uris } = credentials.web;
+
+        const oAuth2Client = new google.auth.OAuth2(
+            client_id,
+            client_secret,
+            redirect_uris[0]
+        );
+        oAuth2Client.setCredentials(token);
+
+        const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
+        const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
+
+        const CALENDAR_ID = process.env.CALENDAR_ID;
+        const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+        const SHEET_NAME = process.env.SHEET_NAME;
+
         const { name, phone, service, date, time } = req.body;
 
-        if (!horarioValido(date, time)) {
+        if (!name || !phone || !service || !date || !time) {
+            return res.status(400).json({ message: "Preencha todos os campos." });
+        }
+
+        // 🔹 Validação de horário comercial
+        const dateObj = new Date(`${date}T${time}:00-03:00`);
+        const dia = dateObj.getDay();
+        const hora = dateObj.getHours();
+
+        const horarioValido =
+            (dia >= 1 && dia <= 5 && hora >= 9 && hora < 18) ||
+            (dia === 6 && hora >= 9 && hora < 13);
+
+        if (!horarioValido) {
             return res.status(400).json({ message: "❌ Fora do horário comercial." });
         }
 
+        // 🔹 Verifica conflitos de horário
         const startDateTime = new Date(`${date}T${time}:00-03:00`);
         const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
 
@@ -333,6 +331,7 @@ app.post("/api/agendar", async (req, res) => {
             return res.status(400).json({ message: "⚠️ Este horário já está ocupado." });
         }
 
+        // 🔹 Cria o evento no Google Calendar
         const event = {
             summary: `${service} - ${name}`,
             start: { dateTime: startDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
@@ -341,19 +340,19 @@ app.post("/api/agendar", async (req, res) => {
 
         await calendar.events.insert({ calendarId: CALENDAR_ID, resource: event });
 
+        // 🔹 Salva no Google Sheets
         await sheets.spreadsheets.values.append({
             spreadsheetId: SPREADSHEET_ID,
-            range: `${SHEET_NAME}!A:F`,
+            range: `${SHEET_NAME}!A:E`,
             valueInputOption: "USER_ENTERED",
             requestBody: { values: [[name, phone, service, date, time]] },
         });
 
-        res.status(200).json({ message: "✅ Agendamento criado com sucesso!" });
+        return res.status(200).json({ message: "✅ Agendamento criado com sucesso!" });
     } catch (error) {
         console.error("❌ Erro no agendamento:", error);
-        res.status(500).json({ message: "Erro interno no servidor." });
+        return res.status(500).json({ message: "Erro interno no servidor." });
     }
-});
+}
 
-export default app;
 

@@ -261,115 +261,49 @@ app.post("/agendar", async (req, res) => {
 // 🚀 Exporta o app para o Vercel
 export default app;*/
 
-// server.js
 import express from "express";
-import bodyParser from "body-parser";
+import cors from "cors";
 import { google } from "googleapis";
 import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 
-// === Caminhos ===
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+// === CONFIGURAÇÕES GERAIS ===
 const app = express();
+app.use(express.json());
 
-// ✅ Middleware CORS manual — resolve o preflight
-app.use((req, res, next) => {
-    const allowedOrigin = "https://dev-barber-n8uz.vercel.app"; // frontend na Vercel
-    res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+// === LIBERAÇÃO DO CORS ===
+app.use(cors({
+    origin: "*", // pode trocar pelo domínio do front depois
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+}));
 
-    if (req.method === "OPTIONS") {
-        return res.sendStatus(204); // resposta pro preflight
-    }
+// === CARREGANDO CREDENCIAIS E TOKEN ===
+const credentials = JSON.parse(fs.readFileSync("credentials.json"));
+const token = JSON.parse(fs.readFileSync("token.json"));
 
-    next();
-});
-
-app.use(bodyParser.json());
-
-// === Credenciais Google ===
-const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-const token = JSON.parse(process.env.GOOGLE_TOKEN);
-
-const { client_secret, client_id, redirect_uris } = credentials.web;
-
-const oAuth2Client = new google.auth.OAuth2(
-    client_id,
-    client_secret,
-    redirect_uris[0]
-);
-
+const { client_secret, client_id, redirect_uris } = credentials.installed;
+const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 oAuth2Client.setCredentials(token);
 
+// === CONFIG DO CALENDAR E SHEETS ===
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
 
-// === IDs (configurados no painel da Vercel) ===
+// ID da planilha e do calendário (use variáveis de ambiente na Vercel)
 const CALENDAR_ID = process.env.CALENDAR_ID;
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
-const SHEET_NAME = process.env.SHEET_NAME;
+const SHEET_ID = process.env.SHEET_ID;
 
-// === Função pra validar horário ===
-function horarioValido(dateStr, timeStr) {
-    const date = new Date(`${dateStr}T${timeStr}:00-03:00`);
-    const dia = date.getDay();
-    const hora = date.getHours();
-
-    if (dia === 0) return false;
-    if (dia >= 1 && dia <= 5) return hora >= 9 && hora < 18;
-    if (dia === 6) return hora >= 9 && hora < 13;
-    return false;
-}
-
-// === Rota de agendamento ===
+// === ROTA PRINCIPAL PARA AGENDAMENTO ===
 app.post("/agendar", async (req, res) => {
     try {
-        const { name, phone, service, date, time } = req.body;
+        const { nome, telefone, servico, data, horario } = req.body;
 
-        const valores = {
-            "Corte": 40,
-            "Barba": 30,
-            "Corte + Barba": 60,
-        };
-        const valor = valores[service] || 0;
-
-        if (!horarioValido(date, time)) {
-            return res.status(400).json({
-                message: "❌ Horário fora do expediente. Escolha outro horário.",
-            });
-        }
-
-        const startDateTime = new Date(`${date}T${time}:00-03:00`);
-        const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
-
-        const events = await calendar.events.list({
-            calendarId: CALENDAR_ID,
-            timeMin: startDateTime.toISOString(),
-            timeMax: endDateTime.toISOString(),
-            singleEvents: true,
-            orderBy: "startTime",
-        });
-
-        if (events.data.items.length > 0) {
-            return res.status(400).json({
-                message: "⚠️ Este horário já está ocupado. Escolha outro.",
-            });
-        }
-
+        // === 1️⃣ Adiciona o evento no Google Calendar ===
         const event = {
-            summary: `${service} - ${name}`,
-            start: {
-                dateTime: startDateTime.toISOString(),
-                timeZone: "America/Sao_Paulo",
-            },
-            end: {
-                dateTime: endDateTime.toISOString(),
-                timeZone: "America/Sao_Paulo",
-            },
+            summary: `Agendamento: ${servico}`,
+            description: `Cliente: ${nome}\nTelefone: ${telefone}`,
+            start: { dateTime: `${data}T${horario}:00-03:00` },
+            end: { dateTime: `${data}T${horario}:00-03:00` },
         };
 
         await calendar.events.insert({
@@ -377,24 +311,27 @@ app.post("/agendar", async (req, res) => {
             resource: event,
         });
 
+        // === 2️⃣ Adiciona os dados na Planilha ===
         await sheets.spreadsheets.values.append({
-            spreadsheetId: SPREADSHEET_ID,
-            range: `${SHEET_NAME}!A:F`,
-            valueInputOption: "USER_ENTERED",
+            spreadsheetId: SHEET_ID,
+            range: "A:E",
+            valueInputOption: "RAW",
             requestBody: {
-                values: [[name, phone, service, date, time, valor]],
+                values: [[nome, telefone, servico, data, horario]],
             },
         });
 
-        res.json({ message: "✅ Agendamento criado com sucesso!" });
+        res.status(200).json({ message: "Agendamento criado com sucesso!" });
     } catch (error) {
-        console.error("❌ Erro ao criar agendamento:", error);
-        res.status(500).json({
-            message:
-                "Erro ao criar agendamento. Verifique logs do servidor para detalhes.",
-        });
+        console.error("Erro ao agendar:", error);
+        res.status(500).json({ error: "Erro ao agendar horário." });
     }
 });
 
-// Exporta app pro Vercel
+// === TESTE DE CONEXÃO ===
+app.get("/", (req, res) => {
+    res.send("🚀 API DevBarber rodando com sucesso!");
+});
+
+// === EXPORT PARA VERCEL ===
 export default app;

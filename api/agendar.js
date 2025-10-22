@@ -261,50 +261,100 @@ app.post("/agendar", async (req, res) => {
 // 🚀 Exporta o app para o Vercel
 export default app;*/
 
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("bookingForm");
-    const submitBtn = document.getElementById("submitBtn");
+import { google } from "googleapis";
 
-    async function enviarAgendamento(e) {
-        e.preventDefault();
+export default async function handler(req, res) {
+    // 🔹 Configuração de CORS (necessária para o navegador aceitar a requisição)
+    res.setHeader("Access-Control-Allow-Origin", "https://dev-barber-n8uz.vercel.app");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
 
-        const name = document.getElementById("name").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const service = document.getElementById("service").value;
-        const date = document.getElementById("date").value;
-        const time = document.getElementById("time").value;
-
-        if (!name || !phone || !service || !date || !time) {
-            alert("Por favor, preencha todos os campos!");
-            return;
-        }
-
-        const data = { name, phone, service, date, time };
-
-        try {
-            const response = await fetch("https://dev-barber-xi.vercel.app/api/agendar", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || "Erro na resposta do servidor");
-            }
-
-            const result = await response.json();
-            alert(result.message || "Agendamento criado com sucesso!");
-            form.reset();
-        } catch (error) {
-            console.error("Erro ao enviar agendamento:", error);
-            alert("Erro ao enviar agendamento 😢\nVerifique sua conexão e tente novamente.");
-        }
+    // 🔹 Responde imediatamente ao preflight
+    if (req.method === "OPTIONS") {
+        return res.status(200).end();
     }
 
-    form.addEventListener("submit", enviarAgendamento);
-    if (submitBtn) submitBtn.addEventListener("click", enviarAgendamento);
-}); 
+    // 🔹 Bloqueia qualquer método que não seja POST
+    if (req.method !== "POST") {
+        return res.status(405).json({ message: "Método não permitido" });
+    }
+
+    try {
+        // 🔹 Credenciais e autenticação
+        const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+        const token = JSON.parse(process.env.GOOGLE_TOKEN);
+        const { client_secret, client_id, redirect_uris } = credentials.web;
+
+        const oAuth2Client = new google.auth.OAuth2(
+            client_id,
+            client_secret,
+            redirect_uris[0]
+        );
+        oAuth2Client.setCredentials(token);
+
+        const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
+        const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
+
+        const CALENDAR_ID = process.env.CALENDAR_ID;
+        const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
+        const SHEET_NAME = process.env.SHEET_NAME;
+
+        const { name, phone, service, date, time } = req.body;
+
+        if (!name || !phone || !service || !date || !time) {
+            return res.status(400).json({ message: "Preencha todos os campos." });
+        }
+
+        // 🔹 Validação de horário comercial
+        const dateObj = new Date(`${date}T${time}:00-03:00`);
+        const dia = dateObj.getDay();
+        const hora = dateObj.getHours();
+
+        const horarioValido =
+            (dia >= 1 && dia <= 5 && hora >= 9 && hora < 18) ||
+            (dia === 6 && hora >= 9 && hora < 13);
+
+        if (!horarioValido) {
+            return res.status(400).json({ message: "❌ Fora do horário comercial." });
+        }
+
+        // 🔹 Verifica conflitos de horário
+        const startDateTime = new Date(`${date}T${time}:00-03:00`);
+        const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
+
+        const events = await calendar.events.list({
+            calendarId: CALENDAR_ID,
+            timeMin: startDateTime.toISOString(),
+            timeMax: endDateTime.toISOString(),
+            singleEvents: true,
+            orderBy: "startTime",
+        });
+
+        if (events.data.items.length > 0) {
+            return res.status(400).json({ message: "⚠️ Este horário já está ocupado." });
+        }
+
+        // 🔹 Cria evento no Google Calendar
+        const event = {
+            summary: `${service} - ${name}`,
+            start: { dateTime: startDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
+            end: { dateTime: endDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
+        };
+
+        await calendar.events.insert({ calendarId: CALENDAR_ID, resource: event });
+
+        // 🔹 Salva no Google Sheets
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: SPREADSHEET_ID,
+            range: `${SHEET_NAME}!A:E`,
+            valueInputOption: "USER_ENTERED",
+            requestBody: { values: [[name, phone, service, date, time]] },
+        });
+
+        return res.status(200).json({ message: "✅ Agendamento criado com sucesso!" });
+    } catch (error) {
+        console.error("❌ Erro no agendamento:", error);
+        return res.status(500).json({ message: "Erro interno no servidor." });
+    }
+}
 

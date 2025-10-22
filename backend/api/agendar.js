@@ -261,98 +261,36 @@ app.post("/agendar", async (req, res) => {
 // 🚀 Exporta o app para o Vercel
 export default app;*/
 
-import { google } from "googleapis";
-
 export default async function handler(req, res) {
-    // 🔹 CORS manual (funciona em ambiente serverless)
+    // Configuração de CORS
     res.setHeader("Access-Control-Allow-Origin", "https://dev-barber-n8uz.vercel.app");
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
+    // Permitir requisições OPTIONS (preflight)
     if (req.method === "OPTIONS") {
-        return res.status(200).end(); // Responde o preflight
+        return res.status(200).end();
     }
 
-    if (req.method !== "POST") {
-        return res.status(405).json({ message: "Método não permitido" });
-    }
+    // --- A partir daqui, seu código real de agendamento ---
+    if (req.method === "POST") {
+        try {
+            const body = req.body;
 
-    try {
-        const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-        const token = JSON.parse(process.env.GOOGLE_TOKEN);
-        const { client_secret, client_id, redirect_uris } = credentials.web;
+            // Exemplo: processar os dados enviados pelo formulário
+            console.log("Dados recebidos:", body);
 
-        const oAuth2Client = new google.auth.OAuth2(
-            client_id,
-            client_secret,
-            redirect_uris[0]
-        );
-        oAuth2Client.setCredentials(token);
-
-        const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
-        const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
-
-        const CALENDAR_ID = process.env.CALENDAR_ID;
-        const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
-        const SHEET_NAME = process.env.SHEET_NAME;
-
-        const { name, phone, service, date, time } = req.body;
-
-        if (!name || !phone || !service || !date || !time) {
-            return res.status(400).json({ message: "Preencha todos os campos." });
+            // Retorna sucesso
+            return res.status(200).json({ message: "Agendamento recebido com sucesso!" });
+        } catch (error) {
+            console.error("Erro ao processar:", error);
+            return res.status(500).json({ message: "Erro no servidor" });
         }
-
-        // 🔹 Validação de horário comercial
-        const dateObj = new Date(`${date}T${time}:00-03:00`);
-        const dia = dateObj.getDay();
-        const hora = dateObj.getHours();
-
-        const horarioValido =
-            (dia >= 1 && dia <= 5 && hora >= 9 && hora < 18) ||
-            (dia === 6 && hora >= 9 && hora < 13);
-
-        if (!horarioValido) {
-            return res.status(400).json({ message: "❌ Fora do horário comercial." });
-        }
-
-        // 🔹 Verifica conflitos de horário
-        const startDateTime = new Date(`${date}T${time}:00-03:00`);
-        const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
-
-        const events = await calendar.events.list({
-            calendarId: CALENDAR_ID,
-            timeMin: startDateTime.toISOString(),
-            timeMax: endDateTime.toISOString(),
-            singleEvents: true,
-            orderBy: "startTime",
-        });
-
-        if (events.data.items.length > 0) {
-            return res.status(400).json({ message: "⚠️ Este horário já está ocupado." });
-        }
-
-        // 🔹 Cria o evento no Google Calendar
-        const event = {
-            summary: `${service} - ${name}`,
-            start: { dateTime: startDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
-            end: { dateTime: endDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
-        };
-
-        await calendar.events.insert({ calendarId: CALENDAR_ID, resource: event });
-
-        // 🔹 Salva no Google Sheets
-        await sheets.spreadsheets.values.append({
-            spreadsheetId: SPREADSHEET_ID,
-            range: `${SHEET_NAME}!A:E`,
-            valueInputOption: "USER_ENTERED",
-            requestBody: { values: [[name, phone, service, date, time]] },
-        });
-
-        return res.status(200).json({ message: "✅ Agendamento criado com sucesso!" });
-    } catch (error) {
-        console.error("❌ Erro no agendamento:", error);
-        return res.status(500).json({ message: "Erro interno no servidor." });
+    } else {
+        res.setHeader("Allow", ["POST", "OPTIONS"]);
+        return res.status(405).end(`Método ${req.method} não permitido`);
     }
 }
+
 
 

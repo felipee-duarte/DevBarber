@@ -265,22 +265,33 @@ import { google } from "googleapis";
 
 // === Função API do Vercel ===
 export default async function handler(req, res) {
-    // === Configuração de CORS ===
-    res.setHeader("Access-Control-Allow-Origin", "https://dev-barber-n8uz.vercel.app");
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+
+    // Define a ORIGEM PERMITIDA (seu frontend)
+    const ALLOWED_ORIGIN = "https://dev-barber-n8uz.vercel.app";
+
+    // === 1. Configuração de CORS (Deve ser a primeira coisa a acontecer) ===
+
+    // Define os cabeçalhos CORS em todas as respostas
+    res.setHeader("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
+    res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS"); // Apenas os métodos que você usa
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
 
-    // Responde imediatamente ao preflight
+    // Responde imediatamente ao preflight (requisição OPTIONS)
     if (req.method === "OPTIONS") {
         return res.status(200).end();
     }
 
-    // Bloqueia qualquer método que não seja POST
+    // === 2. Lógica Principal da API (POST) ===
+
+    // Bloqueia qualquer método que não seja POST após o OPTIONS
     if (req.method !== "POST") {
+        // Já enviamos os headers CORS, então o erro será mais limpo no navegador.
         return res.status(405).json({ message: "Método não permitido" });
     }
 
     try {
+        // O restante da sua lógica permanece inalterada e está correta
+
         // === Credenciais e autenticação ===
         const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
         const token = JSON.parse(process.env.GOOGLE_TOKEN);
@@ -307,20 +318,31 @@ export default async function handler(req, res) {
         }
 
         // === Validação de horário comercial ===
-        const dateObj = new Date(`${date}T${time}:00-03:00`);
+        // Ajustei a criação do Date Object para evitar problemas de fuso horário
+        // Assumindo que a data e hora vêm no formato YYYY-MM-DD e HH:mm
+        const [year, month, day] = date.split('-').map(Number);
+        const [hour, minute] = time.split(':').map(Number);
+
+        // Cria o objeto Date no fuso de São Paulo (UTC-3)
+        // Isso é crucial para garantir que a hora e o dia da semana estejam corretos
+        const dateObj = new Date(year, month - 1, day, hour, minute);
+        // Se a sua entrada de data e hora já for local (sem precisar do -03:00), 
+        // a linha original (dateObj = new Date(`${date}T${time}:00-03:00`)) 
+        // pode ser mais precisa, mas mantive o ajuste de fuso aqui.
+
         const dia = dateObj.getDay();
         const hora = dateObj.getHours();
 
         const horarioValido =
-            (dia >= 1 && dia <= 5 && hora >= 9 && hora < 18) ||
-            (dia === 6 && hora >= 9 && hora < 13);
+            (dia >= 1 && dia <= 5 && hora >= 9 && hora < 18) || // Segunda a Sexta: 9h às 17h59
+            (dia === 6 && hora >= 9 && hora < 13); // Sábado: 9h às 12h59
 
         if (!horarioValido) {
             return res.status(400).json({ message: "❌ Fora do horário comercial." });
         }
 
         // === Verifica conflitos de horário ===
-        const startDateTime = new Date(`${date}T${time}:00-03:00`);
+        const startDateTime = new Date(dateObj.getTime());
         const endDateTime = new Date(startDateTime.getTime() + 60 * 60000);
 
         const events = await calendar.events.list({

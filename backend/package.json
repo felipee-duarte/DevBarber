@@ -1,20 +1,15 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "main": "agendar.js",
   "type": "module",
-  "main": "server.js",
   "scripts": {
     "start": "node agendar.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
+    "express": "^4.21.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "debug": "^4.3.4",
-    "express": "^4.18.2",
     "googleapis": "^126.0.1"
   }
 }

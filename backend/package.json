@@ -1,9 +1,9 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "backend/agendar.js",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "node backend/agendar.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

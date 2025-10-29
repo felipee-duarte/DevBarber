@@ -435,7 +435,7 @@ function horarioValido(dateStr, timeStr) {
     return false;
 }
 
-app.post("/api/agendar", async (req, res) => {
+app.post("/agendar", async (req, res) => {
     try {
         const { name, phone, service, date, time } = req.body;
 

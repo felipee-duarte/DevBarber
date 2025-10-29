@@ -1,15 +1,18 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "agendar.js",
-  "type": "module",
+  "main": "backend/agendar.js",
   "scripts": {
-    "start": "node agendar.js"
+    "start": "node backend/agendar.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "API de agendamento integrada ao Google Calendar e Google Sheets",
   "dependencies": {
-    "express": "^4.21.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "express": "^4.21.1",
     "googleapis": "^126.0.1"
   }
 }

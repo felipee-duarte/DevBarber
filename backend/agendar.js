@@ -382,16 +382,12 @@ export default async function handler(req, res) {
 }*/
 
 // server.js
-import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
-import { google } from "googleapis";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const { google } = require("googleapis");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 app.use(cors());
@@ -405,8 +401,10 @@ try {
     credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
     token = JSON.parse(process.env.GOOGLE_TOKEN);
 } catch (err) {
-    // fallback para arquivo local (útil para testes locais)
-    credentials = JSON.parse(fs.readFileSync(path.join(__dirname, "../credentials.json")));
+    // fallback local para testes
+    credentials = JSON.parse(
+        fs.readFileSync(path.join(__dirname, "../credentials.json"))
+    );
     token = JSON.parse(fs.readFileSync(path.join(__dirname, "../token.json")));
 }
 
@@ -469,8 +467,14 @@ app.post("/api/agendar", async (req, res) => {
 
         const event = {
             summary: `${service} - ${name}`,
-            start: { dateTime: startDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
-            end: { dateTime: endDateTime.toISOString(), timeZone: "America/Sao_Paulo" },
+            start: {
+                dateTime: startDateTime.toISOString(),
+                timeZone: "America/Sao_Paulo",
+            },
+            end: {
+                dateTime: endDateTime.toISOString(),
+                timeZone: "America/Sao_Paulo",
+            },
         };
 
         await calendar.events.insert({ calendarId: CALENDAR_ID, resource: event });
@@ -488,7 +492,8 @@ app.post("/api/agendar", async (req, res) => {
     } catch (error) {
         console.error("❌ Erro ao criar agendamento:", error);
         res.status(500).json({
-            message: "Erro ao criar agendamento. Verifique logs do servidor para detalhes.",
+            message:
+                "Erro ao criar agendamento. Verifique logs do servidor para detalhes.",
         });
     }
 });

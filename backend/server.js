@@ -423,7 +423,7 @@ const sheets = google.sheets({ version: "v4", auth: oAuth2Client });
 
 const CALENDAR_ID = process.env.CALENDAR_ID;
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
-const SHEET_NAME = process.env.SHEET_NAME || "Tabela DevBarber";
+const SHEET_NAME = process.env.SHEET_NAME || "Agendamentos";
 
 function horarioValido(dateStr, timeStr) {
     const date = new Date(`${dateStr}T${timeStr}:00-03:00`);

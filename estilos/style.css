@@ -696,7 +696,7 @@ div.txt-animado {
 }
 
 /* From Uiverse.io by abrahamcalsin */ 
-#loadingScreen {
+/*#loadingScreen {
   display: none;
   position: fixed;
   top: 0;
@@ -708,7 +708,7 @@ div.txt-animado {
   display: flex;
   align-items: center;
   justify-content: center;
-}
+}*/
 
 .dot-spinner {
   --uib-size: 2.8rem;

@@ -127,7 +127,7 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   }
 });
 
-/*document.getElementById("submitBtn").addEventListener("click", async (e) => {
+document.getElementById("submitBtn").addEventListener("click", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("name").value;
@@ -150,70 +150,6 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   } catch (error) {
     alert("Erro ao enviar agendamento");
     console.error(error);
-  }
-});*/
-
-// === Funções do carregamento ===
-function showLoading() {
-  document.getElementById("loadingScreen").style.display = "flex";
-}
-
-function hideLoading() {
-  document.getElementById("loadingScreen").style.display = "none";
-}
-
-// === Lógica do formulário ===
-const form = document.getElementById("bookingForm");
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById("name").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-  const service = document.getElementById("service").value;
-  const date = document.getElementById("date").value;
-  const time = document.getElementById("time").value;
-
-  if (!name || !phone || !service || !date || !time) {
-    alert("Por favor, preencha todos os campos!");
-    return;
-  }
-
-  const data = { name, phone, service, date, time };
-
-  // Mostra a tela de carregamento
-  showLoading();
-
-  try {
-    const response = await fetch("https://devbarber.onrender.com/agendar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-
-    hideLoading();
-
-    if (response.ok) {
-      alert(result.message || "✅ Agendamento criado com sucesso!");
-
-      // Redireciona para o WhatsApp do barbeiro com mensagem automática
-      const barbeiroPhone = "5519996462753"; 
-      const message = `Olá! Meu nome é ${name}. Marquei um ${service} para o dia ${date} às ${time}.`;
-      const whatsappURL = `https://wa.me/${barbeiroPhone}?text=${encodeURIComponent(message)}`;
-
-      // Abre o WhatsApp em uma nova aba
-      window.open(whatsappURL, "_blank");
-
-      form.reset();
-    } else {
-      alert(result.message || "❌ Erro ao criar agendamento.");
-    }
-  } catch (err) {
-    hideLoading();
-    alert("Erro ao enviar o agendamento 😢");
-    console.error("Erro no agendamento:", err);
   }
 });
 

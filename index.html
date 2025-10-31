@@ -265,42 +265,6 @@
           const result = await response.json();
           alert(result.message || "Agendamento criado com sucesso!");
           form.reset();
-        } catch (err) {
-          alert("Erro ao enviar o agendamento 😢");
-          console.error(err);
-        }
-      });
-    </script>
-
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script-->
-
-    <script>
-      const form = document.getElementById("bookingForm");
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const name = document.getElementById("name").value;
-        const phone = document.getElementById("phone").value;
-        const service = document.getElementById("service").value;
-        const date = document.getElementById("date").value;
-        const time = document.getElementById("time").value;
-
-        const data = { name, phone, service, date, time };
-
-        try {
-          const response = await fetch(
-            "https://devbarber.onrender.com/agendar",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(data),
-            }
-          );
-
-          const result = await response.json();
-          alert(result.message || "Agendamento criado com sucesso!");
-          form.reset();
 
           // 🔁 Redirecionar para o WhatsApp automaticamente
           const numeroBarbeiro = "5519996462753"; 
@@ -315,7 +279,49 @@
           console.error(err);
         }
       });
-    </script>
+    </script>-->
+
+    <script>
+  const form = document.getElementById("bookingForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const service = document.getElementById("service").value;
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+
+    const data = { name, phone, service, date, time };
+
+    try {
+      const response = await fetch("https://devbarber.onrender.com/agendar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      alert(result.message || "Agendamento criado com sucesso!");
+      form.reset();
+
+      // 🔁 Redirecionar para o WhatsApp com um pequeno atraso
+      const numeroBarbeiro = "55819996462753"; // <-- coloque o número do barbeiro aqui
+      const mensagem = `Olá, meu nome é ${name}. Acabei de marcar um ${service} no dia ${date} às ${time}.`;
+      const urlWhatsApp = `https://wa.me/${numeroBarbeiro}?text=${encodeURIComponent(mensagem)}`;
+
+      // aguarda 1 segundo após o alerta, depois abre o WhatsApp
+      setTimeout(() => {
+        window.open(urlWhatsApp, "_blank"); // abre em nova aba
+      }, 1000);
+    } catch (err) {
+      alert("Erro ao enviar o agendamento 😢");
+      console.error(err);
+    }
+  });
+</script>
+
 
     <!-- From Uiverse.io by abrahamcalsin -->
     <div class="dot-spinner" id="loadingScreen">

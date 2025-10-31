@@ -306,10 +306,7 @@
       alert(result.message || "Agendamento criado com sucesso!");
       form.reset();
 
-      // 🔁 Redirecionar para o WhatsApp com um pequeno atraso
-      const numeroBarbeiro = "55819996462753"; // <-- coloque o número do barbeiro aqui
-      const mensagem = `Olá, meu nome é ${name}. Acabei de marcar um ${service} no dia ${date} às ${time}.`;
-      const urlWhatsApp = `https://wa.me/${numeroBarbeiro}?text=${encodeURIComponent(mensagem)}`;
+
 
       // aguarda 1 segundo após o alerta, depois abre o WhatsApp
       setTimeout(() => {

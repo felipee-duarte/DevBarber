@@ -151,6 +151,15 @@ document.getElementById("submitBtn").addEventListener("click", async (e) => {
     alert("Erro ao enviar agendamento");
     console.error(error);
   }
+
+  // Cria a mensagem automática do WhatsApp
+  const msg = `Olá! Meu nome é ${name}, marquei um ${service} no dia ${date} às ${time}.`;
+  const numeroBarbeiro = "5591999999999"; // <-- Coloque aqui o número do barbeiro com DDI (55) e DDD
+  const url = `https://wa.me/${numeroBarbeiro}?text=${encodeURIComponent(msg)}`;
+
+  // Redireciona o cliente para o WhatsApp
+  window.location.href = url;
+
 });
 
 function showLoading() {

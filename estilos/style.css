@@ -581,6 +581,7 @@ div.txt-animado {
 #bookingForm h3 {
   color: white;
   text-align: center;
+  text-transform: uppercase;
   font-size: clamp(16px, 2.5vw, 24px);
 }
 

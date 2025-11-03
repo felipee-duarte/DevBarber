@@ -488,7 +488,7 @@ app.post("/agendar", async (req, res) => {
             },
         });
 
-        res.json({ message: "✅ Agendamento criado com sucesso!" });
+        res.json({ success: true, message: "✅ Agendamento criado com sucesso!" });
     } catch (error) {
         console.error("❌ Erro ao criar agendamento:", error);
         res.status(500).json({

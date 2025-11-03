@@ -127,7 +127,7 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   }
 });
 
-document.getElementById("submitBtn").addEventListener("click", async (e) => {
+/*document.getElementById("submitBtn").addEventListener("click", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("name").value;
@@ -160,7 +160,11 @@ document.getElementById("submitBtn").addEventListener("click", async (e) => {
   // Redireciona o cliente para o WhatsApp
   window.location.href = url;
 
-});
+  const [year, month, day] = date.split("-");
+  const formattedDate = `${day}-${month}-${year}`;
+
+
+});*/
 
 function showLoading() {
   document.getElementById("loadingScreen").style.display = "flex";

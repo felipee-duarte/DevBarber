@@ -127,7 +127,7 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   }
 });
 
-/*document.getElementById("submitBtn").addEventListener("click", async (e) => {
+document.getElementById("submitBtn").addEventListener("click", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("name").value;
@@ -135,6 +135,10 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
   const service = document.getElementById("service").value;
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
+
+  // ✅ Formata a data (de "2025-12-11" para "11-12-2025")
+  const [year, month, day] = date.split("-");
+  const formattedDate = `${day}-${month}-${year}`;
 
   const data = { name, phone, service, date, time };
 
@@ -146,25 +150,27 @@ document.getElementById("bookingForm").addEventListener("submit", async (e) => {
     });
 
     const result = await response.json();
+
     alert(result.message);
+
+    // ✅ Só redireciona pro WhatsApp se o backend retornar sucesso
+    if (response.ok && result.message.includes("sucesso")) {
+      const msg = `Olá! Meu nome é ${name}, marquei um ${service} para o dia ${formattedDate} às ${time}.`;
+      const numeroBarbeiro = "5519996462753";
+      const url = `https://wa.me/${numeroBarbeiro}?text=${encodeURIComponent(msg)}`;
+
+      // Redireciona pro WhatsApp (1 segundo depois do alerta)
+      setTimeout(() => {
+        window.location.href = url;
+      }, 1000);
+    }
+
   } catch (error) {
-    alert("Erro ao enviar agendamento");
+    alert("Erro ao enviar agendamento 😢");
     console.error(error);
   }
+});
 
-  // Cria a mensagem automática do WhatsApp
-  const msg = `Olá! Meu nome é ${name}, marquei um ${service} no dia ${date} às ${time}.`;
-  const numeroBarbeiro = "5519996462753";
-  const url = `https://wa.me/${numeroBarbeiro}?text=${encodeURIComponent(msg)}`;
-
-  // Redireciona o cliente para o WhatsApp
-  window.location.href = url;
-
-  const [year, month, day] = date.split("-");
-  const formattedDate = `${day}-${month}-${year}`;
-
-
-});*/
 
 function showLoading() {
   document.getElementById("loadingScreen").style.display = "flex";

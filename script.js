@@ -154,7 +154,7 @@ document.getElementById("submitBtn").addEventListener("click", async (e) => {
 
   // Cria a mensagem automática do WhatsApp
   const msg = `Olá! Meu nome é ${name}, marquei um ${service} no dia ${date} às ${time}.`;
-  const numeroBarbeiro = "5591999999999"; // <-- Coloque aqui o número do barbeiro com DDI (55) e DDD
+  const numeroBarbeiro = "5519996462753";
   const url = `https://wa.me/${numeroBarbeiro}?text=${encodeURIComponent(msg)}`;
 
   // Redireciona o cliente para o WhatsApp
@@ -168,6 +168,48 @@ function showLoading() {
 
 function hideLoading() {
   document.getElementById("loadingScreen").style.display = "none";
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  const loadingScreen = document.getElementById('loadingScreen');
+
+  // Esconde a tela de carregamento após a página estar pronta
+  if (loadingScreen) {
+    // Usa um pequeno atraso para garantir que a animação seja vista
+    setTimeout(() => {
+      loadingScreen.style.opacity = '0';
+      // Usa 'visibility: hidden' para que o elemento não seja clicável após o fade-out
+      loadingScreen.style.visibility = 'hidden';
+    }, 300); // 300ms de atraso
+  }
+});
+
+async function handleAgendamento(event) {
+  event.preventDefault();
+  const loadingScreen = document.getElementById('loadingScreen');
+
+  // 1. MOSTRAR O SPINNER ANTES DA CHAMADA API
+  loadingScreen.style.visibility = 'visible';
+  loadingScreen.style.opacity = '1';
+
+  try {
+    const response = await fetch('/api/agendar', {
+      method: 'POST',
+      // ... resto das configurações ...
+    });
+
+    const data = await response.json();
+    // ... processar a resposta ...
+
+  } catch (error) {
+    console.error('Erro no agendamento:', error);
+    // ... mostrar mensagem de erro ...
+
+  } finally {
+    // 2. ESCONDER O SPINNER APÓS A REQUISIÇÃO (SEJA SUCESSO OU FALHA)
+    loadingScreen.style.opacity = '0';
+    loadingScreen.style.visibility = 'hidden';
+  }
 }
 
 

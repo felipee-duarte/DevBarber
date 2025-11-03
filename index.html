@@ -182,17 +182,25 @@
           </label>
 
           <label>
-            <input type="date" id="date" name="date" required />
+            <input type="date" id="date" name="date" placeholder="Dia" required />
           </label>
 
           <label>
-            <input type="time" id="time" name="time" required />
+            <input type="time" id="time" name="time" placeholder="Horário" required />
           </label>
 
           <!-- Campo oculto que vai enviar o preço -->
           <input type="hidden" id="price" name="price" />
 
           <button type="button" id="submitBtn">Confirmar Agendamento</button>
+
+          <h3>
+            MARQUE APENAS EM HORÁRIO COMERCIAL.
+          </h3>
+
+          <p>
+            Segunda à sexta: 8:00 às 17:00 <br> Sábados: 9:00 às 13:00 <br> Domingos: Fechado
+          </p>
         </form>
       </section>
       <iframe
@@ -238,49 +246,6 @@
     <script src="script.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!--<script>
-      const form = document.getElementById("bookingForm");
-
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const name = document.getElementById("name").value;
-        const phone = document.getElementById("phone").value;
-        const service = document.getElementById("service").value;
-        const date = document.getElementById("date").value;
-        const time = document.getElementById("time").value;
-
-        const data = { name, phone, service, date, time };
-
-        try {
-          const response = await fetch(
-            "https://devbarber.onrender.com/agendar",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(data),
-            }
-          );
-
-          const result = await response.json();
-          alert(result.message || "Agendamento criado com sucesso!");
-          form.reset();
-
-          // 🔁 Redirecionar para o WhatsApp automaticamente
-          const numeroBarbeiro = "5519996462753"; 
-          const mensagem = `Olá, meu nome é ${name}. Acabei de marcar um ${service} no dia ${date} às ${time}.`;
-          const urlWhatsApp = `https://wa.me/${numeroBarbeiro}?text=${encodeURIComponent(
-            mensagem
-          )}`;
-
-          window.location.href = urlWhatsApp;
-        } catch (err) {
-          alert("Erro ao enviar o agendamento 😢");
-          console.error(err);
-        }
-      });
-    </script>-->
-
     <script>
   const form = document.getElementById("bookingForm");
 
@@ -321,15 +286,17 @@
 
 
     <!-- From Uiverse.io by abrahamcalsin -->
-    <div class="dot-spinner" id="loadingScreen">
-      <div class="dot-spinner__dot"></div>
-      <div class="dot-spinner__dot"></div>
-      <div class="dot-spinner__dot"></div>
-      <div class="dot-spinner__dot"></div>
-      <div class="dot-spinner__dot"></div>
-      <div class="dot-spinner__dot"></div>
-      <div class="dot-spinner__dot"></div>
-      <div class="dot-spinner__dot"></div>
+    <div id="loadingScreen">
+      <div class="dot-spinner">
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+      </div>
     </div>
   </body>
 </html>

@@ -430,8 +430,8 @@ function horarioValido(dateStr, timeStr) {
     const dia = date.getDay();
     const hora = date.getHours();
     if (dia === 0) return false;
-    if (dia >= 1 && dia <= 5) return hora >= 9 && hora < 18;
-    if (dia === 6) return hora >= 9 && hora < 13;
+    if (dia >= 1 && dia <= 5) return hora >= 8 && hora < 18;
+    if (dia === 6) return hora >= 9 && hora < 14;
     return false;
 }
 
